@@ -1,0 +1,68 @@
+<p class="title">Koszyk</p>
+<p class="title__small" *ngIf="items.length == 0">Koszyk jest pusty</p>
+<app-item
+    class="wrap"
+    *ngFor="let itemEl of items; let i = index;"
+    [item] = "itemEl"
+    [index] = "i"
+></app-item>
+<div *ngIf="items.length != 0 && !loginStatus" class="title__small">Zaloguj się by móc kupić produkty</div>
+<div class="wrapper" *ngIf="items.length != 0 && loginStatus">
+  <div class="title__small">Cena całkowita: {{ totalCost }} zł</div>
+
+  <div class="radio__wrap">
+    <div class="radio__wrapper">
+      <input type="radio" name="paymentMethod" value="card" [(ngModel)]="selectedPaymentMethod"><p class="radio__text">Karta</p>
+    </div>
+    <div class="radio__wrapper">
+      <input type="radio" name="paymentMethod" value="blik" [(ngModel)]="selectedPaymentMethod"><p class="radio__text">Blik</p>
+    </div>
+  </div>
+
+  <form class="login__wrapper" [formGroup]="cardForm" *ngIf="selectedPaymentMethod === 'card'">
+    <div class="input__wrapper">
+      <p class="login__title">Podaj Numer Karty</p>
+      <div class="error__wrapper">
+        <input class="login__input" type="text" formControlName="cardNumber" placeholder="111122223333">
+        <div *ngIf="cardForm.get('cardNumber')?.hasError('pattern') || cardForm.get('cardNumber')?.hasError('required')" class="error__popup">
+          <p *ngIf="errors.includes('invalidCardNumber') && cardForm.get('cardNumber')?.hasError('required') != true">Błędna Karta</p>
+          <p *ngIf="cardForm.get('cardNumber')?.hasError('required') && submitted">Puste Pole</p>
+        </div>
+      </div>
+    </div>
+    <div class="input__wrapper">
+      <p class="login__title">Data ważności</p>
+      <div class="error__wrapper">
+        <input class="login__input" type="text" formControlName="expirationDate" placeholder="10/23">
+        <div *ngIf="cardForm.get('expirationDate')?.hasError('pattern') || cardForm.get('expirationDate')?.hasError('required')" class="error__popup">
+          <p *ngIf="errors.includes('invalidDate') && cardForm.get('expirationDate')?.hasError('required') != true">Błędna data</p>
+          <p *ngIf="cardForm.get('expirationDate')?.hasError('required') && submitted">Puste Pole</p>
+        </div>
+      </div>
+    </div>
+    <div class="input__wrapper">
+      <p class="login__title">CCV</p>
+      <div class="error__wrapper">
+        <input class="login__input" type="text" formControlName="ccv" placeholder="123">
+        <div *ngIf="cardForm.get('ccv')?.hasError('pattern') || cardForm.get('ccv')?.hasError('required')" class="error__popup">
+          <p *ngIf="errors.includes('invalidCCV') && cardForm.get('ccv')?.hasError('required') != true">Błędne CCV</p>
+          <p *ngIf="cardForm.get('ccv')?.hasError('required') && submitted">Puste Pole</p>
+        </div>
+      </div>
+    </div>
+    <button class="button__buy" (click)="buyProducts(cardForm)"> Kup Produkty</button>
+  </form>
+  <form class="login__wrapper" [formGroup]="blikForm" *ngIf="selectedPaymentMethod === 'blik'">
+    <div class="input__wrapper">
+      <p class="login__title">Podaj kod blik</p>
+      <div class="error__wrapper">
+        <input class="login__input" type="text" formControlName="blikCode" placeholder="123456">
+        <div *ngIf="blikForm.get('blikCode')?.hasError('pattern') || blikForm.get('blikCode')?.hasError('required')" class="error__popup">
+          <p *ngIf="errors.includes('invalidBlik') && cardForm.get('blikCode')?.hasError('required') != true">Błędny Blik</p>
+          <p *ngIf="blikForm.get('blikCode')?.hasError('required') && submitted">Puste Pole</p>
+        </div>
+      </div>
+    </div>
+    <button class="button__buy" (click)="buyProducts(blikForm)"> Kup Produkty</button>
+  </form>
+</div>

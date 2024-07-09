@@ -1,0 +1,41 @@
+.login__wrapper {
+  display: flex;
+  width: 330px;
+  flex-direction: column;
+  gap: 20px;
+  margin-top:25px;
+  align-items: center;
+  position: relative;
+}
+.info__block {
+  position: absolute;
+  padding: 10px;
+  background-color: var(--Grey);
+  border: 3px solid var(--White);
+  left: 45px;
+  right: 45px;
+  top:20px;
+  bottom: 150px;
+  z-index: 1;
+  p {
+    color: var(--Yellow);
+    margin: 10px 0;
+    font-size: 15px;
+  }
+}
+.info__button {
+  color: var(--White);
+  background-color: var(--Grey);
+  border: 2px solid var(--White);
+  border-radius: 50%;
+  width:30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  top: 5px;
+  right: 30px;
+  font-size: 20px;
+  z-index: 2;
+}

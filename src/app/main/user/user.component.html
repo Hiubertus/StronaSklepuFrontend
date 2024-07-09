@@ -1,0 +1,19 @@
+<div class="wrapper">
+  <p class="title">Panel Użytkownika</p>
+  <a
+    class="user__button"
+    routerLink="/user/data"
+    routerLinkActive="active-link"
+    aria-current="page"
+    ariaCurrentWhenActive="page"
+  >Dane użytkownika</a>
+  <a
+    class="user__button"
+    routerLink="/user/orders"
+    routerLinkActive="active-link"
+    aria-current="page"
+    ariaCurrentWhenActive="page"
+  >Zamówienia</a>
+  <a class="user__button" (click)="logoutUser()">Wyloguj się</a>
+  <a class="user__button" (click)="deleteUser()">Usuń Konto</a>
+</div>

@@ -1,0 +1,75 @@
+<div class="item" *ngIf="item">
+  <div class="item__wrap">
+    <div
+      class="item__image"
+      [ngStyle]="{'background-image': item.image ? 'url(' + item.image + ')' : 'none'}"
+    >
+    </div>
+    <div class="item__brief">
+      <p class="item__name"> {{item.name}}</p>
+      <p class="item__cost"> {{item.cost}} zł</p>
+      <div class="item__rating"><p class="item__number"> {{item.rating}}</p>
+        <ng-container *ngFor="let star of [1, 2, 3, 4, 5]">
+          <mat-icon *ngIf="item.rating >= star" class="item__star">star</mat-icon>
+          <mat-icon *ngIf="item.rating >= star - 0.5 && item.rating < star" class="item__star">star_half</mat-icon>
+          <mat-icon *ngIf="item.rating < star - 0.5" class="item__star">star_outline</mat-icon>
+        </ng-container>
+        <p class="item__number">na {{ item.review_amount }}</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="item__description"> {{item.description}} </div>
+  <div class="button__wrapper">
+    <button class="button__cart button" (click)="toggleCart(item.item_id)" [ngClass]="{'active': isItemInCart(item.item_id)}">
+      <p class="item__text">Dodaj do koszyka</p>
+      <mat-icon class="item__icon">shopping_basket</mat-icon>
+    </button>
+    <button class="button__fav button" (click)="toggleFavorite(item.item_id)" [ngClass]="{'active': isItemInFav(item.item_id)}">
+      <p class="item__text">Dodaj do zapisanych</p>
+      <mat-icon class="item__icon">favorite</mat-icon>
+    </button>
+  </div>
+</div>
+
+<div class="wrapper" *ngIf="item">
+  <p class="title">Opinie:</p>
+  <p class="title__small" *ngIf="item.review_amount == 0">Nie ma opinii na temat tego produktu</p>
+  <p class="title__small" *ngIf="!loginStatus"> Zaloguj się aby moc dać recenzje: </p>
+  <form (ngSubmit)="submitReview()" class="your__review" *ngIf="loginStatus && check">
+
+    <p class="title__small"> Napisz Recenzję: </p>
+    <div>
+      <ng-container *ngFor="let star of [1, 2, 3, 4, 5]">
+        <mat-icon
+          class="review__star"
+          (mouseover)="enter(star)"
+          (click)="setRating(star)"
+          (mouseleave)="leave()"
+        >
+          {{ hoverState >= star ? 'star' : 'star_outline' }}
+        </mat-icon>
+      </ng-container>
+    </div>
+
+    <textarea class="review__input" placeholder="Napisz recenzję (opcjonalne)" name="reviewText"  [(ngModel)]="reviewText"></textarea>
+    <button class="review__button" type="submit" >Wstaw Recenzję</button>
+  </form>
+
+  <div class="review__order">
+    <div class="review__wrapper" *ngFor="let j of reviews" [ngClass]="{'review__order__higher': userHasReview(j.user_id), 'review__order__lower': !userHasReview(j.user_id)}" >
+      <div class="review__relative">
+        <button *ngIf="userHasReview(j.user_id) && loginStatus" class="delete__review" (click)="deleteReview(item.item_id, j.user_id)">X</button>
+        <p class="review__name">{{j.user_name}} {{j.user_surname}}</p>
+        <div>
+          <ng-container *ngFor="let star of [1, 2, 3, 4, 5]">
+            <mat-icon *ngIf="j.rate >= star" class="review__star">star</mat-icon>
+            <mat-icon *ngIf="j.rate < star" class="review__star">star_outline</mat-icon>
+          </ng-container>
+        </div>
+        <p class="review__text">{{j.text}}</p>
+      </div>
+    </div>
+  </div>
+
+</div>

@@ -1,0 +1,88 @@
+<div class="login__wrapper">
+  <p class="title">Dane użytkownika:</p>
+
+  <form class="login__section" [formGroup]="myForm1" (ngSubmit)="saveGeneralData()">
+    <p class="section__title">Dane Ogólne</p>
+
+    <div class="input__wrapper">
+      <p class="login__title">imie:</p>
+      <p class="login__text">{{ user!.name }}</p>
+    </div>
+
+    <div class="input__wrapper">
+      <p class="login__title">nazwisko:</p>
+      <p class="login__text">{{ user!.surname }}</p>
+    </div>
+
+    <div class="input__wrapper">
+      <p class="login__title">email:</p>
+      <p class="login__text">{{ user!.email }}</p>
+    </div>
+
+    <div class="input__wrapper">
+      <p class="login__title">ulica:</p>
+      <input type="text" class="login__input" formControlName="street" [value]="user!.street">
+    </div>
+
+    <div class="input__wrapper">
+      <p class="login__title">miasto:</p>
+      <input type="text" class="login__input" formControlName="city" [value]="user!.city">
+    </div>
+
+    <div class="input__wrapper">
+      <p class="login__title">apartament:</p>
+      <input type="text" class="login__input" formControlName="apartment" [value]="user!.apartment">
+    </div>
+
+    <button type="submit" class="button__input">Zapisz</button>
+    <div class="message">
+      <p *ngIf="check" class="message__success">Zmieniono dane</p>
+      <p *ngIf="!check && submitted2" class="message__fail">Coś poszło nie tak</p>
+    </div>
+  </form>
+
+  <form class="login__section" [formGroup]="myForm2" (ngSubmit)="savePassword()">
+    <div class="info__button" (click)="info=!info">?</div>
+    <div class="info__block" *ngIf="info">
+      <p>Hasło (Dlugość >=9): Musi zawierać: Mała litera, wielka litera, cyfra, znak specialny</p>
+    </div>
+
+    <p class="section__title">Zmiana Hasła</p>
+    <div class="input__wrapper">
+      <p class="login__title">stare hasło:</p>
+      <div class="error__wrapper">
+        <input type="password" class="login__input" formControlName="oldPassword">
+        <div class="error__popup">
+          <p *ngIf="errors.includes('badPassword') && !myForm2.get('oldPassword')?.hasError('required') && submitted">Błędne hasło</p>
+          <p *ngIf="myForm2.get('oldPassword')?.hasError('required') && submitted">Puste Pole</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="input__wrapper">
+      <p class="login__title">nowe hasło:</p>
+      <div class="error__wrapper">
+        <input type="password" class="login__input" formControlName="newPassword">
+        <div class="error__popup">
+          <p *ngIf="myForm2.get('newPassword')?.hasError('invalidPassword') && !myForm2.get('newPassword')?.hasError('required') && submitted">Błędne hasło</p>
+          <p *ngIf="myForm2.get('newPassword')?.hasError('required') && submitted">Puste Pole</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="input__wrapper">
+      <p class="login__title">powtórz nowe hasło:</p>
+      <div class="error__wrapper">
+        <input type="password" class="login__input" formControlName="repeatNewPassword">
+        <div class="error__popup">
+          <p *ngIf="myForm2.get('newPassword')?.hasError('passwordMismatch') && !myForm2.get('repeatNewPassword')?.hasError('required') && submitted">Hasła nie są identyczne</p>
+          <p *ngIf="myForm2.get('repeatNewPassword')?.hasError('required') && submitted">Puste Pole</p>
+          <p *ngIf="errors.includes('databaseError') && submitted"> Coś poszło nie tak </p>
+          <p *ngIf="errors.includes('passwordUpdated')" class="successful">Hasło zaktualizowane</p>
+        </div>
+      </div>
+    </div>
+    <button type="submit" class="button__input">Zmień hasło</button>
+
+  </form>
+</div>

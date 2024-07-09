@@ -1,0 +1,11 @@
+.background {
+  width: 100%;
+  min-height: calc(120vh - 53px);
+  background-color: var(--Black);
+  display: flex;
+  justify-content: center;
+  //align-items: center;
+}
+.wrapper {
+  max-width:1400px;
+}

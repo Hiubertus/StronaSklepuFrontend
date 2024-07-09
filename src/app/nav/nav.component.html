@@ -1,0 +1,55 @@
+<div class="wrapper">
+  <ul>
+
+    <li class="show1">
+      <a
+        routerLink="/home"
+        routerLinkActive="active-link"
+        aria-current="page"
+        ariaCurrentWhenActive="page">
+        <mat-icon>home</mat-icon><p>Start</p>
+      </a>
+    </li>
+
+    <li class="show2">
+      <a
+        routerLink="/favorite"
+        routerLinkActive="active-link"
+        aria-current="page"
+        ariaCurrentWhenActive="page">
+        <mat-icon>favorite</mat-icon><p>Zapisane</p>
+      </a>
+    </li>
+
+    <li class="show3">
+      <a
+        routerLink="/cart"
+        routerLinkActive="active-link"
+        aria-current="page"
+        ariaCurrentWhenActive="page">
+        <mat-icon>shopping_basket</mat-icon><p>Koszyk</p>
+      </a>
+    </li>
+
+    <li class="show4">
+      <a
+        *ngIf="!loginStatus"
+        routerLink="/login"
+        routerLinkActive="active-link"
+        aria-current="page"
+        ariaCurrentWhenActive="page">
+        <mat-icon>login</mat-icon><p>Zaloguj</p>
+      </a>
+      <a *ngIf="loginStatus == null" class="temp"></a>
+      <a
+        *ngIf="loginStatus"
+         routerLink="/user"
+         routerLinkActive="active-link"
+         aria-current="page"
+         ariaCurrentWhenActive="page">
+        <mat-icon>person</mat-icon><p>Konto</p>
+      </a>
+    </li>
+
+  </ul>
+</div>

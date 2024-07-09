@@ -1,0 +1,58 @@
+* {
+  transition: 0.1s;
+}
+.wrapper {
+  width: 100%;
+  position: fixed;
+  bottom: 0;
+  background-color: var(--Grey);
+  display: flex;
+  justify-content: center;
+  z-index: 1000;
+}
+ul {
+  list-style: none;
+  display: flex;
+  width: 100%;
+  max-width: 1200px;
+  justify-content: space-around;
+  li {
+    width: 25%;
+    &:hover {
+      a {
+        color: var(--Blue);
+      }
+    }
+    a {
+      padding: 5px 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-decoration: none;
+      color: var(--White);
+    }
+    .active-link{
+      color: var(--Blue);
+    }
+  }
+}
+temp {
+  width:25%
+}
+.show1 {
+  animation: visible 0.375s linear 0s both;
+}
+.show2 {
+  animation: visible 0.375s linear 0.125s both;
+}
+.show3 {
+  animation: visible 0.375s linear 0.25s both;
+}
+.show4 {
+  animation: visible 0.375s linear 0.375s both;
+}
+
+@keyframes visible {
+  0% {opacity: 0}
+  100% {opacity: 1}
+}

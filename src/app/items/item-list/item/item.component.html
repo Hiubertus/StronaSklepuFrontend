@@ -1,0 +1,28 @@
+<div class="item">
+  <button class="button__cart" (click)="cart($event, item.item_id)" [ngClass]="{'active': isItemInCart(item.item_id)}">
+    <mat-icon>shopping_basket</mat-icon>
+  </button>
+  <button class="button__fav" (click)="fav($event, item.item_id)" [ngClass]="{'active': isItemInFav(item.item_id)}">
+    <mat-icon>favorite</mat-icon>
+  </button>
+  <div
+    class="item__wrapper"
+    (click)="redirectToItem(index)"
+  >
+    <div
+      class="item__image"
+      [ngStyle]="{'background-image': item.image ? 'url(' + item.image + ')' : 'none'}">
+
+    </div>
+    <p class="item__name"> {{item.name}}</p>
+    <div class="item__rating"> <p class="item__number">{{item.rating}}</p>
+      <ng-container *ngFor="let star of [1, 2, 3, 4, 5]">
+        <mat-icon *ngIf="item.rating >= star" class="item__star">star</mat-icon>
+        <mat-icon *ngIf="item.rating >= star - 0.5 && item.rating < star" class="item__star">star_half</mat-icon>
+        <mat-icon *ngIf="item.rating < star - 0.5" class="item__star">star_outline</mat-icon>
+      </ng-container>
+      <p class="item__number">na {{item.review_amount}}</p>
+    </div>
+    <p class="item__cost"> {{item.cost}} zł </p>
+  </div>
+</div>
