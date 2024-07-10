@@ -94,7 +94,6 @@ export class AuthService {
         user?: User
       }>(`${this.apiUrl}/loginUser`, user).subscribe({
         next: data => {
-          console.log(data);
           this.loginStatus = true;
           this.localStorage.saveUser(data.user)
           this.user = data.user!

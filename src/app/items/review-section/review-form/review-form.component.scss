@@ -1,0 +1,48 @@
+.review__star {
+  color: var(--Yellow)
+}
+.review__text{
+  color: var(--White);
+  font-size: 20px;
+  white-space: pre-wrap; /* Zachowuje białe znaki i łamanie linii */
+  word-wrap: break-word; /* Łamie długie słowa */
+  overflow-wrap: break-word; /* Łamie długie słowa */
+  display: block;
+  width: 100%;
+}
+.review__input {
+  min-height: 80px;
+  font-size: 20px;
+  background-color: var(--Grey);
+  color: var(--White);
+  border: 3px solid var(--White);
+  resize: vertical;
+}
+.your__review {
+  width: 100%;
+  border: 5px solid var(--White);
+  padding: 20px;
+  border-radius: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  color: var(--White);
+  font-size: 20px;
+  margin: 20px 0;
+  position: relative;
+}
+.review__submit__button {
+  align-self: center;
+  width: 150px;
+  padding: 10px;
+  border: 3px solid var(--White);
+  background-color: var(--Grey);
+  color: var(--White);
+  border-radius: 20px;
+  cursor: pointer;
+  transition: 0.2s;
+  &:hover {
+    color: var(--Yellow);
+    border: 3px solid var(--Yellow);
+  }
+}

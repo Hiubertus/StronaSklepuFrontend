@@ -1,0 +1,18 @@
+<form (ngSubmit)="submitReview()" class="your__review" *ngIf="loginStatus && check">
+  <p class="title__small"> Napisz Recenzję: </p>
+  <div>
+    <ng-container *ngFor="let star of [1, 2, 3, 4, 5]">
+      <mat-icon
+        class="review__star"
+        (mouseover)="enter(star)"
+        (click)="setRating(star)"
+        (mouseleave)="leave()"
+      >
+        {{ hoverState >= star ? 'star' : 'star_outline' }}
+      </mat-icon>
+    </ng-container>
+  </div>
+
+  <textarea class="review__input" placeholder="Napisz recenzję (opcjonalne)" name="reviewText"  [(ngModel)]="reviewText"></textarea>
+  <button class="review__submit__button" type="submit" >Wstaw Recenzję</button>
+</form>

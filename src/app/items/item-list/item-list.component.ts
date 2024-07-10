@@ -26,7 +26,6 @@ export class ItemListComponent implements OnInit, OnDestroy {
       this.items = data
     })
   }
-
   ngOnDestroy() {
     this.itemSubscription.unsubscribe()
   }

@@ -1,0 +1,13 @@
+<div class="review__wrapper" [ngClass]="userHasReview(review.user_id) ? 'review__order__higher' : 'review__order__lower' ">
+  <button *ngIf="userHasReview(review.user_id) && loginStatus" class="review__button__delete review__button" (click)="deleteReview(index+1, review.user_id)"><mat-icon>close</mat-icon></button>
+  <button *ngIf="userHasReview(review.user_id) && loginStatus" class="review__button__edit review__button" ><mat-icon>edit</mat-icon></button>
+  <p class="review__name">{{review.user_name}} {{review.user_surname}}</p>
+  <p class="review__name">{{ review.date | date:'dd-MM-yyyy' }}</p>
+  <div>
+    <ng-container *ngFor="let star of [1, 2, 3, 4, 5]">
+      <mat-icon *ngIf="review.rate >= star" class="review__star">star</mat-icon>
+      <mat-icon *ngIf="review.rate < star" class="review__star">star_outline</mat-icon>
+    </ng-container>
+  </div>
+  <p class="review__text">{{review.text}}</p>
+</div>

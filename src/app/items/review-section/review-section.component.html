@@ -1,0 +1,15 @@
+  <p class="title__small" *ngIf="!loginStatus"> Zaloguj się aby moc dać recenzje: </p>
+  <app-review-form
+  [check]="check"
+  [loginStatus]="loginStatus"
+  [index]="index"
+  ></app-review-form>
+
+  <div class="review__order">
+    <app-review *ngFor="let review of reviews"
+      [review]="review"
+      [loginStatus]="loginStatus"
+      [index]="index"
+      [user]="user"
+    ></app-review>
+  </div>

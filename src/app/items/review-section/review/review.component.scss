@@ -1,0 +1,73 @@
+.review__button {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  top: 15px;
+  right: 15px;
+  width: 35px;
+  height: 35px;
+  border: 3px solid var(--White);
+  color: var(--White);
+  background-color: var(--Grey);
+  border-radius: 50%;
+  cursor: pointer;
+  transition: 0.2s;
+  mat-icon {
+    display: block;
+    font-size: 20px;
+    width: 20px;
+    height: 20px;
+  }
+  &__delete {
+    top: 15px;
+    right: 15px;
+    &:hover {
+      color: var(--Red);
+      border: 3px solid var(--Red);
+    }
+  }
+  &__edit{
+    top: 15px;
+    right: 60px;
+    &:hover {
+      color: var(--Yellow);
+      border: 3px solid var(--Yellow);
+    }
+  }
+}
+.review__star {
+  color: var(--Yellow)
+}
+.review__name,
+.review__text{
+  color: var(--White);
+  font-size: 20px;
+  white-space: pre-wrap; /* Zachowuje białe znaki i łamanie linii */
+  word-wrap: break-word; /* Łamie długie słowa */
+  overflow-wrap: break-word; /* Łamie długie słowa */
+  display: block;
+  width: 100%;
+}
+.review__name {
+  width: calc(100% - 80px);
+}
+.review__wrapper {
+  width: 100%;
+  border: 5px solid var(--White);
+  padding: 20px;
+  border-radius: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  color: var(--White);
+  font-size: 20px;
+  margin: 20px 0;
+  position: relative;
+}
+.review__order__lower {
+  order: 2;
+}
+.review__order__higher {
+  order: 1;
+}

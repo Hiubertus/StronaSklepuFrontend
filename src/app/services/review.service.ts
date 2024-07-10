@@ -66,10 +66,8 @@ export class ReviewService {
   }
 
   async addReview(item_id: number, text: string, rate: number) {
-    const currentDate = new Date(); // Pobierz aktualną datę
-    const formattedDate = `${currentDate.getFullYear()}-${(currentDate.getMonth() + 1).toString().padStart(2, '0')}-${currentDate.getDate().toString().padStart(2, '0')}`; // Sformatuj datę jako YYYY-MM-DD
-
-    const review = {item_id, text, rate, date: formattedDate}; // Dodaj datę do obiektu review
+    const date = new Date(); // Pobierz aktualną datę
+    const review = {item_id, text, rate, date}; // Dodaj datę do obiektu review
     this.http.post<Review[]>(`${this.apiUrl}/Review`, review, {
       headers: {Authorization: `Bearer ${this.authService.getToken()}`}
     }).subscribe(() => {

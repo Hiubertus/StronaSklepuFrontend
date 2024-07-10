@@ -6,4 +6,5 @@ export interface Review {
   rate: number;
   user_name: string;
   user_surname: string;
+  date: string;
 }
