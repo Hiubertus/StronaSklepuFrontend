@@ -35,5 +35,6 @@
 <div class="wrapper" *ngIf="item">
   <p class="title">Opinie:</p>
   <p class="title__small" *ngIf="item.review_amount == 0">Nie ma opinii na temat tego produktu</p>
-  <app-review-section></app-review-section>
+  <app-review-section
+  [totalReviews]="item.review_amount"></app-review-section>
 </div>

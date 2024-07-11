@@ -1,4 +1,4 @@
-<form (ngSubmit)="submitReview()" class="your__review" *ngIf="loginStatus && check">
+<form (ngSubmit)="submitReview()" class="your__review" *ngIf="loginStatus && !check">
   <p class="title__small"> Napisz Recenzję: </p>
   <div>
     <ng-container *ngFor="let star of [1, 2, 3, 4, 5]">

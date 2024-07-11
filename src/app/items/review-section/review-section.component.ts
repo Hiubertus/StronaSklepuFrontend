@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {DatePipe, NgClass, NgForOf, NgIf} from "@angular/common";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {MatIcon} from "@angular/material/icon";
@@ -10,6 +10,7 @@ import {AuthService} from "../../services/auth.service";
 import {ReviewService} from "../../services/review.service";
 import {ReviewComponent} from "./review/review.component";
 import {ReviewFormComponent} from "./review-form/review-form.component";
+import {PaginationComponent} from "./pagination/pagination.component";
 
 @Component({
   selector: 'app-review-section',
@@ -23,7 +24,8 @@ import {ReviewFormComponent} from "./review-form/review-form.component";
     ReactiveFormsModule,
     NgClass,
     ReviewComponent,
-    ReviewFormComponent
+    ReviewFormComponent,
+    PaginationComponent
   ],
   templateUrl: './review-section.component.html',
   styleUrl: './review-section.component.scss'
@@ -36,7 +38,11 @@ export class ReviewSectionComponent implements OnInit, OnDestroy{
   index!: number;
   loginStatus!: boolean
   user!: User | null
-  check: boolean = false;
+  check!: boolean;
+
+  @Input() totalReviews!: number;
+  reviewsPerPage: number = 4;
+  currentPage: number = 0;
 
   constructor(private route: ActivatedRoute,
               private authService: AuthService,
@@ -46,7 +52,7 @@ export class ReviewSectionComponent implements OnInit, OnDestroy{
   async ngOnInit() {
     this.index = this.route.snapshot.params['index']
 
-    await this.reviewService.getReviewsFromDB(this.index + 1)
+    await this.reviewService.getReviewsFromDB(this.index + 1, this.currentPage);
     this.reviewSubscription = this.reviewService.reviewsChanged.subscribe((reviews: Review[]) => {
       this.reviews = reviews
       this.userCanWriteReview()
@@ -64,13 +70,11 @@ export class ReviewSectionComponent implements OnInit, OnDestroy{
     this.reviewSubscription.unsubscribe()
   }
   userCanWriteReview() {
-    let found = false;
-    for (const j of this.reviews) {
-      if (j.user_id == this.user?.user_id) {
-        found = true;
-        break;
-      }
-    }
-    this.check = !found;
+    this.check = this.reviews[0].user_id == this.user?.user_id
+  }
+
+  async onPageChange(page: number){
+    this.currentPage = page;
+    await this.reviewService.getReviewsFromDB(this.index + 1, this.currentPage);
   }
 }

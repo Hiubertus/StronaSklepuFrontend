@@ -36,34 +36,36 @@ export class ReviewService {
       }
     });
   }
-  async getReviewsFromDB(item_id: number) {
+  async getReviewsFromDB(item_id: number, page: number) {
     const user = this.authService.getUser();
+    const offset = page * 4;
     let params = new HttpParams()
       .append('item_id', item_id.toString())
       .append('filter', 'date')
       .append('sort', 'desc')
-      .append('offset', '0');
+      .append('offset', offset.toString());
 
     if (user) {
       const user_id = user.user_id;
       params = params.append('user_id', user_id.toString());
     }
 
-    this.http.get<Review[]>(`${this.apiUrl}/ItemReviews`,
-      { params: params }).subscribe({
-      next: (data) => {
-        this.reviews = data;
-        if (user) {
-          this.getUserReviewForItem(item_id);
-        } else {
-          this.reviewsChanged.next(this.reviews);
+    this.http.get<Review[]>(`${this.apiUrl}/ItemReviews`, { params: params })
+      .subscribe({
+        next: async (data) => {
+          this.reviews = data;
+          if (user) {
+            await this.getUserReviewForItem(item_id);
+          } else {
+            this.reviewsChanged.next(this.reviews);
+          }
+        },
+        error: (err) => {
+          console.error('Błąd podczas pobierania recenzji:', err);
         }
-      },
-      error: (err) => {
-        console.error('Błąd podczas pobierania recenzji:', err);
-      }
-    });
+      });
   }
+
 
   async addReview(item_id: number, text: string, rate: number) {
     const date = new Date(); // Pobierz aktualną datę
@@ -71,7 +73,7 @@ export class ReviewService {
     this.http.post<Review[]>(`${this.apiUrl}/Review`, review, {
       headers: {Authorization: `Bearer ${this.authService.getToken()}`}
     }).subscribe(() => {
-      this.getReviewsFromDB(item_id);
+      this.getReviewsFromDB(item_id,0);
       this.itemService.getItemsFromDb();
     });
   }
@@ -84,7 +86,7 @@ export class ReviewService {
       headers: {Authorization: `Bearer ${this.authService.getToken()}`},
       params: params
     }).subscribe(() => {
-      this.getReviewsFromDB(item_id)
+      this.getReviewsFromDB(item_id,0)
       this.itemService.getItemsFromDb()
     })
   }

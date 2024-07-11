@@ -1,4 +1,11 @@
   <p class="title__small" *ngIf="!loginStatus"> Zaloguj się aby moc dać recenzje: </p>
+  <app-pagination
+    [check]="check"
+    [totalReviews]="totalReviews"
+    [reviewsPerPage]="reviewsPerPage"
+    [currentPage]="currentPage"
+    (pageChanged)="onPageChange($event)">
+  </app-pagination>
   <app-review-form
   [check]="check"
   [loginStatus]="loginStatus"
