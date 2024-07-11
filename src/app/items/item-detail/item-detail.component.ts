@@ -29,17 +29,19 @@ import {ReviewSectionComponent} from "../review-section/review-section.component
 export class ItemDetailComponent implements OnInit, OnDestroy {
   item!: Item;
   itemSubscription!: Subscription
-  index!: number;
+  item_id!: number;
   constructor(private itemService: ItemService,
               private route: ActivatedRoute) {
   }
 
   async ngOnInit() {
-    this.index = this.route.snapshot.params['index']
-
-    this.item = this.itemService.getItem(this.index);
+    this.item_id = this.route.snapshot.params['item_id']
+    console.log(this.item_id)
+    this.item = this.itemService.getItem(this.item_id);
+    console.log(this.item)
     this.itemSubscription = this.itemService.itemsChanged.subscribe(() => {
-      this.item = this.itemService.getItem(this.index);
+      this.item = this.itemService.getItem(this.item_id);
+      console.log(this.item)
     })
   }
 
@@ -47,19 +49,19 @@ export class ItemDetailComponent implements OnInit, OnDestroy {
     this.itemSubscription.unsubscribe()
   }
 
-  isItemInCart(itemId: number): boolean {
-    return this.itemService.isItemInCart(itemId);
+  isItemInCart(item_id: number): boolean {
+    return this.itemService.isItemInCart(item_id);
   }
 
-  isItemInFav(itemId: number): boolean {
-    return this.itemService.isItemInFav(itemId);
+  isItemInFav(item_id: number): boolean {
+    return this.itemService.isItemInFav(item_id);
   }
 
-  toggleCart(itemId: number) {
-    this.itemService.toggleCart(itemId);
+  toggleCart(item_id: number) {
+    this.itemService.toggleCart(item_id);
   }
 
-  toggleFavorite(itemId: number) {
-    this.itemService.toggleFavorite(itemId);
+  toggleFavorite(item_id: number) {
+    this.itemService.toggleFavorite(item_id);
   }
 }

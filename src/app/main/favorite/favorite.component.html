@@ -2,7 +2,6 @@
 <p class="title__small" *ngIf="items.length == 0">Nie ma zapisanych produktów</p>
 <app-item
   class="wrap"
-  *ngFor="let itemEl of items; let i = index;"
+  *ngFor="let itemEl of items"
   [item] = "itemEl"
-  [index] = "i"
 ></app-item>

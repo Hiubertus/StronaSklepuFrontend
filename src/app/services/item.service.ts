@@ -22,23 +22,21 @@ export class ItemService {
 
   constructor(private http: HttpClient, private authService: AuthService, private localStorage: LocalStorageService) {
   }
-  async getItemfromDb(index: number) {
-    let params = new HttpParams()
-      .append('item_id', index)
-    this.http.get<Item>(`${this.apiUrl}/Items`, {
-      params: params
-      }
-    ).subscribe((data: Item) => {
-      this.items[index-1] = data
-      this.itemsChanged.next(this.items);
-
-      this.loadCartFromStorage()
-      this.cartChanged.next(this.getCart())
-
-      this.loadFavoriteFromStorage()
-      this.favoriteChanged.next(this.getFavorite())
-    })
+  async getItemFromDb(item_id: number) {
+    this.http.get<Item>(`${this.apiUrl}/Item`, { params: new HttpParams().set('item_id', item_id.toString()) })
+      .subscribe((data: Item) => {
+        //console.log(data)
+        const index = this.items.findIndex(item => item.item_id == item_id);
+        console.log(index)
+        if (index !== -1) {
+          this.items[index] = data;
+        } else {
+          this.items.push(data);
+        }
+        this.itemsChanged.next(this.items);
+      });
   }
+
   async getItemsFromDb() {
     this.http.get<Item[]>(`${this.apiUrl}/Items`
     ).subscribe((data: Item[]) => {
@@ -57,30 +55,29 @@ export class ItemService {
     return this.items.slice()
   }
 
-  getItem(index: number) {
-    return this.items[index];
+  getItem(item_id: number) {
+    return this.items.find(item => item.item_id == item_id)!;
   }
 
   getCart() {
-    return this.cartItems.map(item_id => this.items[item_id - 1]).slice();
+    return this.cartItems.map(item_id => this.getItem(item_id)).filter(item => item != null);
   }
 
   getFavorite() {
-    return this.favoriteItems.map(item_id => this.items[item_id - 1]).slice();
+    return this.favoriteItems.map(item_id => this.getItem(item_id)).filter(item => item != null);
   }
 
   loadCartFromStorage() {
-    const temp = this.localStorage.getCartFromStorage()
+    const temp = this.localStorage.getCartFromStorage();
     if (temp) {
-      this.cartItems = temp
-
+      this.cartItems = temp;
     }
   }
 
   loadFavoriteFromStorage() {
-    const temp = this.localStorage.getFavoriteFromStorage()
+    const temp = this.localStorage.getFavoriteFromStorage();
     if (temp) {
-      this.favoriteItems = temp
+      this.favoriteItems = temp;
     }
   }
 
@@ -92,26 +89,26 @@ export class ItemService {
     return this.favoriteItems.includes(item_id);
   }
 
-  toggleCart(index: number) {
-    const itemIndex = this.cartItems.indexOf(index);
+  toggleCart(item_id: number) {
+    const itemIndex = this.cartItems.indexOf(item_id);
     if (itemIndex === -1) {
-      this.cartItems.push(index);
+      this.cartItems.push(item_id);
     } else {
       this.cartItems.splice(itemIndex, 1);
     }
-    this.localStorage.saveCart(this.cartItems)
-    this.cartChanged.next(this.getCart())
+    this.localStorage.saveCart(this.cartItems);
+    this.cartChanged.next(this.getCart());
   }
 
-  toggleFavorite(index: number) {
-    const itemIndex = this.favoriteItems.indexOf(index);
-    if (itemIndex === -1) {
-      this.favoriteItems.push(index);
+  toggleFavorite(item_id: number) {
+    const itemIndex = this.favoriteItems.indexOf(item_id);
+    if (itemIndex == -1) {
+      this.favoriteItems.push(item_id);
     } else {
       this.favoriteItems.splice(itemIndex, 1);
     }
-    this.localStorage.saveFavorite(this.favoriteItems)
-    this.favoriteChanged.next(this.getFavorite())
+    this.localStorage.saveFavorite(this.favoriteItems);
+    this.favoriteChanged.next(this.getFavorite());
   }
 
 }

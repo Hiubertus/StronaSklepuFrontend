@@ -52,7 +52,8 @@ export class ReviewService {
       headers: {Authorization: `Bearer ${this.authService.getToken()}`}
     }).subscribe(() => {
       this.getReviewsFromDB(item_id,0);
-      this.itemService.getItemsFromDb();
+      this.itemService.getItemFromDb(item_id)
+      //this.itemService.getItemsFromDb();
     });
   }
 
@@ -65,7 +66,8 @@ export class ReviewService {
       params: params
     }).subscribe(() => {
       this.getReviewsFromDB(item_id,0)
-      this.itemService.getItemsFromDb()
+      this.itemService.getItemFromDb(item_id)
+      //this.itemService.getItemsFromDb()
     })
   }
 }

@@ -35,7 +35,7 @@ export class ReviewSectionComponent implements OnInit, OnDestroy{
   reviews: Review[] = []
   loginStatusSubscription!: Subscription
   reviewSubscription!: Subscription
-  index!: number;
+  item_id!: number;
   loginStatus!: boolean
   user!: User | null
   check!: boolean;
@@ -50,9 +50,9 @@ export class ReviewSectionComponent implements OnInit, OnDestroy{
   }
 
   async ngOnInit() {
-    this.index = this.route.snapshot.params['index']
+    this.item_id = this.route.snapshot.params['item_id']
 
-    await this.reviewService.getReviewsFromDB(this.index + 1, this.currentPage);
+    await this.reviewService.getReviewsFromDB(this.item_id, this.currentPage);
     this.reviewSubscription = this.reviewService.reviewsChanged.subscribe((reviews: Review[]) => {
       this.reviews = reviews
       this.userCanWriteReview()
@@ -75,6 +75,6 @@ export class ReviewSectionComponent implements OnInit, OnDestroy{
 
   async onPageChange(page: number){
     this.currentPage = page;
-    await this.reviewService.getReviewsFromDB(this.index + 1, this.currentPage);
+    await this.reviewService.getReviewsFromDB(this.item_id, this.currentPage);
   }
 }

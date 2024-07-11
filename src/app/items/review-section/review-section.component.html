@@ -9,14 +9,14 @@
   <app-review-form
   [check]="check"
   [loginStatus]="loginStatus"
-  [index]="index"
+  [item_id]="item_id"
   ></app-review-form>
 
   <div class="review__order">
     <app-review *ngFor="let review of reviews"
       [review]="review"
       [loginStatus]="loginStatus"
-      [index]="index"
+      [item_id]="item_id"
       [user]="user"
     ></app-review>
   </div>

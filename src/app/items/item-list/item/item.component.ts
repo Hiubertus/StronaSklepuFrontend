@@ -22,29 +22,28 @@ import {Router} from "@angular/router";
 })
 export class ItemComponent {
   @Input() item!: Item // Wykrzyknik sygnuje, że wiem, że te dane zostaną ustawione
-  @Input() index!: number // Identycznie
   constructor(private itemService: ItemService, private router: Router) {
   }
 
-  cart(event: Event, index: number) {
+  cart(event: Event, item_id: number) {
     event.stopPropagation();
-    this.itemService.toggleCart(index);
+    this.itemService.toggleCart(item_id);
   }
 
-  fav(event: Event, index: number) {
+  fav(event: Event, item_id: number) {
     event.stopPropagation();
-    this.itemService.toggleFavorite(index);
+    this.itemService.toggleFavorite(item_id);
   }
 
-  isItemInCart(itemId: number): boolean {
-    return this.itemService.isItemInCart(itemId);
+  isItemInCart(item_id: number): boolean {
+    return this.itemService.isItemInCart(item_id);
   }
 
-  isItemInFav(itemId: number): boolean {
-    return this.itemService.isItemInFav(itemId);
+  isItemInFav(item_id: number): boolean {
+    return this.itemService.isItemInFav(item_id);
   }
 
-  redirectToItem(itemId: number): void {
-    this.router.navigate(['/item-detail', itemId]);
+  redirectToItem(item_id: number): void {
+    this.router.navigate(['/item-detail', item_id]);
   }
 }

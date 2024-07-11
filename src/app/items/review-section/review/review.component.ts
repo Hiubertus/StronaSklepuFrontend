@@ -21,7 +21,7 @@ import {ReviewService} from "../../../services/review.service";
 export class ReviewComponent {
   @Input() review!: Review;
   @Input() loginStatus!: boolean;
-  @Input() index! : number
+  @Input() item_id! : number
   @Input() user! : User | null;
 
   constructor(private reviewService: ReviewService) {}

@@ -18,7 +18,7 @@ import {ReviewService} from "../../../services/review.service";
   styleUrl: './review-form.component.scss'
 })
 export class ReviewFormComponent {
-  @Input() index! : number;
+  @Input() item_id! : number;
   @Input() check! : boolean;
   @Input() loginStatus! :boolean;
 
@@ -29,7 +29,7 @@ export class ReviewFormComponent {
   constructor(private reviewService: ReviewService) {
   }
   async submitReview() {
-    await this.reviewService.addReview(this.index+1, this.reviewText, this.rating)
+    await this.reviewService.addReview(this.item_id, this.reviewText, this.rating)
   }
 
   setRating(star: number): void {

@@ -14,7 +14,7 @@ import {ItemListComponent} from "./items/item-list/item-list.component";
 
 export const routes: Routes = [
   { path: 'home', component: ItemListComponent },
-  { path: 'item-detail/:index', component: ItemDetailComponent },
+  { path: 'item-detail/:item_id', component: ItemDetailComponent },
   { path: 'cart', component: CartComponent },
   { path: 'favorite', component: FavoriteComponent },
   { path: 'login', component: LoginComponent, canActivate: [authGuardUnlogged] },
