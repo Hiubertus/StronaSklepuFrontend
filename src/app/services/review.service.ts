@@ -17,55 +17,33 @@ export class ReviewService {
 
   constructor(private http: HttpClient, private authService: AuthService, private itemService: ItemService) {
   }
-  async getUserReviewForItem(item_id: number) {
-    let params = new HttpParams()
-      .append('item_id', item_id.toString())
-    this.http.get<Review>(`${this.apiUrl}/UserReview`, {
-      params: params,
-      headers: {Authorization: `Bearer ${this.authService.getToken()}`}
-    }).subscribe({
-      next: (userReview) => {
-        if (userReview) {
-          this.reviews.unshift(userReview);
-          this.reviewsChanged.next(this.reviews);
-        }
-      },
-      error: (err) => {
-        this.reviewsChanged.next(this.reviews);
-        //console.error('Błąd podczas pobierania recenzji użytkownika:', err);
-      }
-    });
-  }
   async getReviewsFromDB(item_id: number, page: number) {
-    const user = this.authService.getUser();
     const offset = page * 4;
+    const user = this.authService.getUser();
     let params = new HttpParams()
       .append('item_id', item_id.toString())
       .append('filter', 'date')
       .append('sort', 'desc')
       .append('offset', offset.toString());
 
-    if (user) {
-      const user_id = user.user_id;
-      params = params.append('user_id', user_id.toString());
-    }
-
-    this.http.get<Review[]>(`${this.apiUrl}/ItemReviews`, { params: params })
-      .subscribe({
-        next: async (data) => {
-          this.reviews = data;
-          if (user) {
-            await this.getUserReviewForItem(item_id);
-          } else {
-            this.reviewsChanged.next(this.reviews);
-          }
-        },
-        error: (err) => {
-          console.error('Błąd podczas pobierania recenzji:', err);
+    this.http.get<{ userReview: Review | null, itemReviews: Review[] }>(`${this.apiUrl}/ItemReviews`, {
+      params: params,
+      headers: user ? { Authorization: `Bearer ${this.authService.getToken()}` } : {}
+    }).subscribe({
+      next: (data) => {
+        const { userReview, itemReviews } = data;
+        if (userReview) {
+          this.reviews = [userReview, ...itemReviews];
+        } else {
+          this.reviews = itemReviews;
         }
-      });
+        this.reviewsChanged.next(this.reviews);
+      },
+      error: (err) => {
+        console.error('Błąd podczas pobierania recenzji:', err);
+      }
+    });
   }
-
 
   async addReview(item_id: number, text: string, rate: number) {
     const date = new Date(); // Pobierz aktualną datę

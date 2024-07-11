@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {Item} from "../models/item.model";
 import {Subject} from "rxjs";
-import {HttpClient} from "@angular/common/http";
+import {HttpClient, HttpParams} from "@angular/common/http";
 import {AuthService} from "./auth.service";
 import {LocalStorageService} from "./local-storage.service";
 import {environment} from "../../enviroments/enviroment";
@@ -22,7 +22,23 @@ export class ItemService {
 
   constructor(private http: HttpClient, private authService: AuthService, private localStorage: LocalStorageService) {
   }
+  async getItemfromDb(index: number) {
+    let params = new HttpParams()
+      .append('item_id', index)
+    this.http.get<Item>(`${this.apiUrl}/Items`, {
+      params: params
+      }
+    ).subscribe((data: Item) => {
+      this.items[index-1] = data
+      this.itemsChanged.next(this.items);
 
+      this.loadCartFromStorage()
+      this.cartChanged.next(this.getCart())
+
+      this.loadFavoriteFromStorage()
+      this.favoriteChanged.next(this.getFavorite())
+    })
+  }
   async getItemsFromDb() {
     this.http.get<Item[]>(`${this.apiUrl}/Items`
     ).subscribe((data: Item[]) => {
