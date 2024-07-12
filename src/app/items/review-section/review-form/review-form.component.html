@@ -1,5 +1,6 @@
-<form (ngSubmit)="submitReview()" class="your__review" *ngIf="loginStatus && !check">
+<form (ngSubmit)="submitReview()" class="your__review" *ngIf="loginStatus && (!check || editMode)">
   <p class="title__small"> Napisz Recenzję: </p>
+  <button *ngIf="editMode" (click)="cancelEditReview()" class="review__button"><mat-icon>close</mat-icon></button>
   <div>
     <ng-container *ngFor="let star of [1, 2, 3, 4, 5]">
       <mat-icon
@@ -14,5 +15,8 @@
   </div>
 
   <textarea class="review__input" placeholder="Napisz recenzję (opcjonalne)" name="reviewText"  [(ngModel)]="reviewText"></textarea>
-  <button class="review__submit__button" type="submit" >Wstaw Recenzję</button>
+  <button class="review__submit__button" type="submit" >
+    <p *ngIf="!editMode">Wstaw Recenzję</p>
+    <p *ngIf="editMode">Zmodyfikuj Recenzje</p>
+  </button>
 </form>

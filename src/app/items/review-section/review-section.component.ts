@@ -37,12 +37,14 @@ export class ReviewSectionComponent implements OnInit, OnDestroy{
   reviewSubscription!: Subscription
   item_id!: number;
   loginStatus!: boolean
-  user!: User | null
-  check!: boolean;
-
+  user!: User | null;
+  check: boolean = true;
+  filter: "rate" | "date" = "date"
+  sort: "asc" | "desc" = "desc"
   @Input() totalReviews!: number;
   reviewsPerPage: number = 4;
   currentPage: number = 0;
+  editMode: boolean = false;
 
   constructor(private route: ActivatedRoute,
               private authService: AuthService,
@@ -52,7 +54,7 @@ export class ReviewSectionComponent implements OnInit, OnDestroy{
   async ngOnInit() {
     this.item_id = this.route.snapshot.params['item_id']
 
-    await this.reviewService.getReviewsFromDB(this.item_id, this.currentPage);
+    await this.reviewService.getReviewsFromDB(this.item_id, this.currentPage, this.filter, this.sort);
     this.reviewSubscription = this.reviewService.reviewsChanged.subscribe((reviews: Review[]) => {
       this.reviews = reviews
       this.userCanWriteReview()
@@ -65,6 +67,18 @@ export class ReviewSectionComponent implements OnInit, OnDestroy{
       this.loginStatus = loginStatusData;
     });
   }
+  async handleFilterChange(filter: "date" | "rate") {
+    this.filter = filter
+    await this.reviewService.getReviewsFromDB(this.item_id, this.currentPage, this.filter, this.sort);
+  }
+
+  async handleSortChange(sort: "asc" | "desc") {
+    this.sort = sort
+    await this.reviewService.getReviewsFromDB(this.item_id, this.currentPage, this.filter, this.sort);
+  }
+  handleEditMode(event: any) {
+    this.editMode = event
+  }
   ngOnDestroy() {
     this.loginStatusSubscription.unsubscribe()
     this.reviewSubscription.unsubscribe()
@@ -75,6 +89,6 @@ export class ReviewSectionComponent implements OnInit, OnDestroy{
 
   async onPageChange(page: number){
     this.currentPage = page;
-    await this.reviewService.getReviewsFromDB(this.item_id, this.currentPage);
+    await this.reviewService.getReviewsFromDB(this.item_id, this.currentPage, this.filter, this.sort);
   }
 }

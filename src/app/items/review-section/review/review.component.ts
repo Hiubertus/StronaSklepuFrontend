@@ -1,4 +1,4 @@
-import {Component, Input} from '@angular/core';
+import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {DatePipe, NgClass, NgForOf, NgIf} from "@angular/common";
 import {MatIcon} from "@angular/material/icon";
 import {Review} from "../../../models/review.model";
@@ -23,9 +23,13 @@ export class ReviewComponent {
   @Input() loginStatus!: boolean;
   @Input() item_id! : number
   @Input() user! : User | null;
-
+  @Input() filter!: "rate" | "date"
+  @Input() sort!: "asc" | "desc"
+  @Output() editStart = new EventEmitter<boolean>();
   constructor(private reviewService: ReviewService) {}
-
+  startEdit() {
+    this.editStart.emit(true)
+  }
   userHasReview(id: number) {
     if (this.user == null) {
       return false
@@ -35,6 +39,7 @@ export class ReviewComponent {
     }
   }
   async deleteReview(item_id: number, user_id: number) {
-    await this.reviewService.deleteReview(item_id, user_id)
+    await this.reviewService.deleteReview(item_id, user_id, this.filter, this.sort)
+    this.editStart.emit(false)
   }
 }

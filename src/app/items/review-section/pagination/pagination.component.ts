@@ -1,12 +1,15 @@
 import {Component, Input, Output} from '@angular/core';
 import { EventEmitter} from "@angular/core";
-import {NgForOf} from "@angular/common";
+import {NgForOf, NgIf} from "@angular/common";
+import {MatIcon} from "@angular/material/icon";
 
 @Component({
   selector: 'app-pagination',
   standalone: true,
   imports: [
-    NgForOf
+    NgForOf,
+    MatIcon,
+    NgIf
   ],
   templateUrl: './pagination.component.html',
   styleUrl: './pagination.component.scss'
@@ -17,6 +20,20 @@ export class PaginationComponent {
   @Input() currentPage: number = 0;
   @Input() check!: boolean;
   @Output() pageChanged = new EventEmitter<number>();
+  filter: "rate" | "date" = "date"
+  sort: "asc" | "desc" = "desc"
+  @Output() filterChanged = new EventEmitter<"rate" | "date">();
+  @Output() sortChanged = new EventEmitter<"asc" | "desc">();
+
+  onFilterChange() {
+    this.filter = this.filter === 'rate' ? 'date' : 'rate';
+    this.filterChanged.emit(this.filter);
+  }
+  onSortChange() {
+    this.sort = this.sort === 'asc' ? 'desc' : 'asc';
+    this.sortChanged.emit(this.sort);
+  }
+
 
   get totalPages(): number {
     console.log(this.check)

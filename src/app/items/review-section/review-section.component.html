@@ -1,22 +1,32 @@
-  <p class="title__small" *ngIf="!loginStatus"> Zaloguj się aby moc dać recenzje: </p>
-  <app-pagination
-    [check]="check"
-    [totalReviews]="totalReviews"
-    [reviewsPerPage]="reviewsPerPage"
-    [currentPage]="currentPage"
-    (pageChanged)="onPageChange($event)">
-  </app-pagination>
-  <app-review-form
+<p class="title__small" *ngIf="!loginStatus"> Zaloguj się aby moc dać recenzje: </p>
+<app-pagination
+  [check]="check"
+  [totalReviews]="totalReviews"
+  [reviewsPerPage]="reviewsPerPage"
+  [currentPage]="currentPage"
+  (filterChanged)="handleFilterChange($event)"
+  (sortChanged)="handleSortChange($event)"
+  (pageChanged)="onPageChange($event)">
+</app-pagination>
+
+<app-review-form
   [check]="check"
   [loginStatus]="loginStatus"
   [item_id]="item_id"
-  ></app-review-form>
+  [filter]="filter"
+  [sort]="sort"
+  [editMode]="editMode"
+  (editModeChange)="handleEditMode($event)"
+></app-review-form>
 
-  <div class="review__order">
-    <app-review *ngFor="let review of reviews"
-      [review]="review"
-      [loginStatus]="loginStatus"
-      [item_id]="item_id"
-      [user]="user"
-    ></app-review>
-  </div>
+<div class="review__order">
+  <app-review *ngFor="let review of reviews"
+              [review]="review"
+              [loginStatus]="loginStatus"
+              [item_id]="item_id"
+              [user]="user"
+              [filter]="filter"
+              [sort]="sort"
+              (editStart)="handleEditMode($event)"
+  ></app-review>
+</div>

@@ -17,13 +17,13 @@ export class ReviewService {
 
   constructor(private http: HttpClient, private authService: AuthService, private itemService: ItemService) {
   }
-  async getReviewsFromDB(item_id: number, page: number) {
+  async getReviewsFromDB(item_id: number, page: number, filter: "rate" | "date", sort: "asc" | "desc") {
     const offset = page * 4;
     const user = this.authService.getUser();
     let params = new HttpParams()
       .append('item_id', item_id.toString())
-      .append('filter', 'date')
-      .append('sort', 'desc')
+      .append('filter', filter)
+      .append('sort', sort)
       .append('offset', offset.toString());
 
     this.http.get<{ userReview: Review | null, itemReviews: Review[] }>(`${this.apiUrl}/ItemReviews`, {
@@ -45,19 +45,27 @@ export class ReviewService {
     });
   }
 
-  async addReview(item_id: number, text: string, rate: number) {
+  async addReview(item_id: number, text: string, rate: number, filter: "rate" | "date", sort: "asc" | "desc") {
     const date = new Date(); // Pobierz aktualną datę
     const review = {item_id, text, rate, date}; // Dodaj datę do obiektu review
-    this.http.post<Review[]>(`${this.apiUrl}/Review`, review, {
+    this.http.post(`${this.apiUrl}/Review`, review, {
       headers: {Authorization: `Bearer ${this.authService.getToken()}`}
     }).subscribe(() => {
-      this.getReviewsFromDB(item_id,0);
+      this.getReviewsFromDB(item_id,0, filter, sort);
       this.itemService.getItemFromDb(item_id)
-      //this.itemService.getItemsFromDb();
     });
   }
-
-  async deleteReview(item_id: number, user_id: number) {
+  async patchReview(item_id: number, text: string, rate: number, filter: "rate" | "date", sort: "asc" | "desc") {
+    const date = new Date(); // Pobierz aktualną datę
+    const review = {item_id, text, rate, date}; // Dodaj datę do obiektu review
+    this.http.patch(`${this.apiUrl}/Review`, review, {
+      headers: {Authorization: `Bearer ${this.authService.getToken()}`}
+    }).subscribe(() => {
+      this.getReviewsFromDB(item_id,0, filter, sort);
+      this.itemService.getItemFromDb(item_id)
+    });
+  }
+  async deleteReview(item_id: number, user_id: number, filter: "rate" | "date", sort: "asc" | "desc") {
     let params = new HttpParams()
     params = params.append("user_id", user_id)
     params = params.append("item_id", item_id)
@@ -65,9 +73,8 @@ export class ReviewService {
       headers: {Authorization: `Bearer ${this.authService.getToken()}`},
       params: params
     }).subscribe(() => {
-      this.getReviewsFromDB(item_id,0)
+      this.getReviewsFromDB(item_id,0, filter, sort)
       this.itemService.getItemFromDb(item_id)
-      //this.itemService.getItemsFromDb()
     })
   }
 }

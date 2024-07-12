@@ -1,4 +1,14 @@
 <div class="pagination">
+  <button (click)="onFilterChange()">
+    <mat-icon *ngIf="filter=='rate'">star</mat-icon>
+    <mat-icon *ngIf="filter=='date'">calendar_month</mat-icon>
+  </button>
+  <button (click)="onSortChange()">
+    <mat-icon *ngIf="sort=='asc'">arrow_upward</mat-icon>
+    <mat-icon *ngIf="sort=='desc'">arrow_downward</mat-icon>
+  </button>
+</div>
+<div class="pagination">
   <button
     *ngFor="let page of pages"
     [disabled]="page === '...'"
