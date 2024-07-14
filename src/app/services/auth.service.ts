@@ -41,6 +41,8 @@ export class AuthService {
         next: data => {
           this.token = data.token
           this.user = data.user
+          this.localStorage.saveUser(data.user)
+          this.localStorage.saveToken(data.token)
           resolve(data)
         },
         error: err => {
@@ -63,21 +65,20 @@ export class AuthService {
   }
 
   async registerUser(name: string, surname: string, password: string, email: string): Promise<{
-    success: boolean,
     message: string
   }> {
     const user = {name, surname, password, email};
-    return new Promise<{ success: boolean, message: string }>((resolve, reject) => {
-      this.http.post<{ success: boolean, message: string }>(`${this.apiUrl}/registerUser`, user).subscribe({
+    return new Promise<{message: string }>((resolve, reject) => {
+      this.http.post<{ message: string }>(`${this.apiUrl}/registerUser`, user).subscribe({
         next: data => {
           resolve(data);
         },
         error: err => {
           console.error(err);
           if (err.error && err.error.message) {
-            reject({success: false, message: err.error.message});
+            reject({ message: err.error.message });
           } else {
-            reject({success: false, message: 'Wystąpił nieznany błąd'});
+            reject({ message: 'Wystąpił nieznany błąd'});
           }
         }
       });
@@ -88,26 +89,25 @@ export class AuthService {
     const user = {email, password}
     return new Promise<any>((resolve, reject) => {
       this.http.post<{
-        success: true,
-        message?: string,
-        token?: string,
-        user?: User
+        message: string,
+        token: string,
+        user: User
       }>(`${this.apiUrl}/loginUser`, user).subscribe({
         next: data => {
           this.loginStatus = true;
           this.localStorage.saveUser(data.user)
-          this.user = data.user!
-          this.localStorage.saveToken(data.token!)
-          this.token = data.token!
+          this.user = data.user
+          this.localStorage.saveToken(data.token)
+          this.token = data.token
           this.loginStatusChanged.next(this.loginStatus);
           resolve(data);
         },
         error: err => {
           console.error(err);
           if (err.error && err.error.message) {
-            reject({success: false, message: err.error.message});
+            reject({ message: err.error.message});
           } else {
-            reject({success: false, message: 'Wystąpił nieznany błąd'});
+            reject({ message: 'Wystąpił nieznany błąd'});
           }
         }
       })
@@ -133,19 +133,20 @@ export class AuthService {
   }
 
   async patchUserData(street: string, apartment: string, city: string) {
-    return new Promise<{ success: boolean, message: string}>((resolve, reject) => {
+    return new Promise<{ message: string}>((resolve, reject) => {
       const userData = {street, apartment, city}
-      this.http.patch<{ success: boolean, message: string}>(`${this.apiUrl}/UserData`, userData, {
+      this.http.patch<{ message: string}>(`${this.apiUrl}/UserData`, userData, {
         headers: {Authorization: `Bearer ` + this.token}
       }).subscribe({
         next: data => {
           resolve(data)
+          this.getUserFromDb()
         },
         error: err => {
           if (err.error && err.error.message) {
-            reject({success: false, message: err.error.message});
+            reject({ message: err.error.message});
           } else {
-            reject({success: false, message: 'Wystąpił nieznany błąd'});
+            reject({ message: 'Wystąpił nieznany błąd'});
           }
         }
       })
@@ -153,20 +154,21 @@ export class AuthService {
   }
 
   async patchUserPassword(oldPassword: string, newPassword: string) {
-    return new Promise<{ success: boolean, message: string }>((resolve, reject) => {
+    return new Promise<{ message: string }>((resolve, reject) => {
       const passwordData = {oldPassword, newPassword}
-      this.http.patch<{ success: boolean, message: string }>(`${this.apiUrl}/UserPassword`, passwordData, {
+      this.http.patch<{ message: string }>(`${this.apiUrl}/UserPassword`, passwordData, {
         headers: {Authorization: `Bearer ` + this.token}
       }).subscribe({
         next: data => {
+
           resolve(data)
         },
         error: err => {
           console.error(err);
           if (err.error && err.error.message) {
-            reject({success: false, message: err.error.message});
+            reject({ message: err.error.message});
           } else {
-            reject({success: false, message: 'Wystąpił nieznany błąd'});
+            reject({ message: 'Wystąpił nieznany błąd'});
           }
         }
       })

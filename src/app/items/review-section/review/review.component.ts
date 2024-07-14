@@ -25,10 +25,10 @@ export class ReviewComponent {
   @Input() user! : User | null;
   @Input() filter!: "rate" | "date"
   @Input() sort!: "asc" | "desc"
-  @Output() editStart = new EventEmitter<boolean>();
+  @Output() editStart = new EventEmitter<{ editMode: boolean, reviewText: string, rating: number} >();
   constructor(private reviewService: ReviewService) {}
   startEdit() {
-    this.editStart.emit(true)
+    this.editStart.emit({ editMode: true, reviewText: this.review.text, rating: this.review.rate} )
   }
   userHasReview(id: number) {
     if (this.user == null) {
@@ -39,7 +39,9 @@ export class ReviewComponent {
     }
   }
   async deleteReview(item_id: number, user_id: number) {
-    await this.reviewService.deleteReview(item_id, user_id, this.filter, this.sort)
-    this.editStart.emit(false)
+    if(confirm("Czy napewno chcesz usunąć recenzje?")) {
+      await this.reviewService.deleteReview(item_id, user_id, this.filter, this.sort)
+      this.editStart.emit({ editMode: false, reviewText: '', rating: 0})
+    }
   }
 }

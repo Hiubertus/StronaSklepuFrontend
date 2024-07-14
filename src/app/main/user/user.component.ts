@@ -17,12 +17,16 @@ export class UserComponent {
   }
 
   async logoutUser() {
-    await this.authService.logout()
-    await this.router.navigate(['/home']);
+    if(confirm("Czy napewno chcesz się wylogować?")) {
+      await this.authService.logout()
+      await this.router.navigate(['/home']);
+    }
   }
 
   async deleteUser() {
-    await this.router.navigate(['/home']);
-    await this.authService.deleteUser()
+    if(confirm("Czy napewno chcesz usunąć swoje konto?")) {
+      await this.router.navigate(['/home']);
+      await this.authService.deleteUser()
+    }
   }
 }

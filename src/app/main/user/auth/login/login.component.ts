@@ -36,12 +36,11 @@ export class LoginComponent implements OnInit {
 
   async onSubmit() {
     this.submitted = true;
-    this.errors = []
-
+    this.errors = [];
     if (this.myForm.valid) {
       try {
         const result = await this.authService.loginUser(this.myForm.value.email, this.myForm.value.password)
-        if (result.success) {
+        if (result) {
           this.myForm.reset();
           this.submitted = false;
           this.errors.push('accountLogged');

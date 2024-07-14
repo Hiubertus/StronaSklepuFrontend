@@ -2,6 +2,7 @@ import {Component, Input, Output} from '@angular/core';
 import { EventEmitter} from "@angular/core";
 import {NgForOf, NgIf} from "@angular/common";
 import {MatIcon} from "@angular/material/icon";
+import {Review} from "../../../models/review.model";
 
 @Component({
   selector: 'app-pagination',
@@ -18,13 +19,12 @@ export class PaginationComponent {
   @Input() totalReviews: number = 0;
   @Input() reviewsPerPage: number = 4;
   @Input() currentPage: number = 0;
-  @Input() check!: boolean;
+  @Input() userHasReview!: boolean;
   @Output() pageChanged = new EventEmitter<number>();
   filter: "rate" | "date" = "date"
   sort: "asc" | "desc" = "desc"
   @Output() filterChanged = new EventEmitter<"rate" | "date">();
   @Output() sortChanged = new EventEmitter<"asc" | "desc">();
-
   onFilterChange() {
     this.filter = this.filter === 'rate' ? 'date' : 'rate';
     this.filterChanged.emit(this.filter);
@@ -36,8 +36,7 @@ export class PaginationComponent {
 
 
   get totalPages(): number {
-    console.log(this.check)
-    const adjustedReviews = this.check ? this.totalReviews - 1 : this.totalReviews;
+    const adjustedReviews = this.userHasReview ? this.totalReviews - 1 : this.totalReviews;
     return Math.ceil(adjustedReviews / this.reviewsPerPage);
   }
 

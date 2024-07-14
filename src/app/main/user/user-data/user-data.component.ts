@@ -67,7 +67,7 @@ export class UserDataComponent implements OnInit {
     if (this.myForm2.valid) {
       try {
         const result = await this.authService.patchUserPassword(this.myForm2.value.oldPassword, this.myForm2.value.newPassword);
-        if (result.success) {
+        if (result) {
           this.myForm2.reset();
           this.myForm2.disable()
           this.submitted = false;
@@ -87,14 +87,17 @@ export class UserDataComponent implements OnInit {
 
   async saveGeneralData() {
     this.submitted2 = true
+    this.check = true
     try {
       const result = await this.authService.patchUserData(this.myForm1.value.street, this.myForm1.value.apartment, this.myForm1.value.city);
-      if (result.success) {
+      console.log(this.myForm1.value.street, this.myForm1.value.apartment, this.myForm1.value.city)
+      if (result) {
         this.submitted2 = false
         this.check = true;
         this.myForm1.disable()
       }
     } catch (err: any) {
+      this.check = false
       console.error('An error occurred:', err);
     }
 

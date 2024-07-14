@@ -1,5 +1,13 @@
-import {Component, EventEmitter, Input, Output} from '@angular/core';
-import {FormsModule, ReactiveFormsModule} from "@angular/forms";
+import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
+import {
+  AbstractControl,
+  FormControl,
+  FormGroup,
+  FormsModule,
+  ReactiveFormsModule,
+  ValidatorFn,
+  Validators
+} from "@angular/forms";
 import {MatIcon} from "@angular/material/icon";
 import {NgForOf, NgIf} from "@angular/common";
 import {ReviewService} from "../../../services/review.service";
@@ -17,44 +25,82 @@ import {ReviewService} from "../../../services/review.service";
   templateUrl: './review-form.component.html',
   styleUrl: './review-form.component.scss'
 })
-export class ReviewFormComponent {
+export class ReviewFormComponent implements OnInit, OnChanges{
   @Input() item_id! : number;
-  @Input() check! : boolean;
+  @Input() userHasReview! : boolean;
   @Input() loginStatus! :boolean;
   @Input() filter!: "rate" | "date"
   @Input() sort!: "asc" | "desc"
   @Input() editMode!: boolean
   @Output() editModeChange = new EventEmitter<boolean>();
-  rating = 0;
-  hoverState = 0;
-  reviewText = '';
 
-  constructor(private reviewService: ReviewService) {
+  @Input() reviewText!: string;
+  @Input() rating!: number;
+
+  hoverState = 0;
+  myForm!: FormGroup
+  submitted: boolean = false;
+  constructor(private reviewService: ReviewService) {}
+  ngOnInit() {
+    this.myForm = new FormGroup({
+      reviewText : new FormControl('', Validators.maxLength(1500)),
+      rating: new FormControl(0, this.ratingValidator())
+    })
   }
+  ngOnChanges(changes: SimpleChanges) {
+    if ((changes['editMode'] || changes['reviewText'] || changes['rating']) && this.editMode) {
+      this.myForm.patchValue({
+        reviewText: this.reviewText,
+        rating: this.rating
+      });
+      this.hoverState = this.rating
+    }
+  }
+
+  ratingValidator(): ValidatorFn {
+    return (control: AbstractControl): { [key: string]: any } | null => {
+      const rating = control.value;
+      return rating > 0 ? null : { invalidRating: true };
+    };
+  }
+
   async submitReview() {
-    if(this.editMode) {
-      await this.reviewService.patchReview(this.item_id, this.reviewText, this.rating, this.filter, this.sort)
-      this.cancelEditReview()
-    }else {
-      await this.reviewService.addReview(this.item_id, this.reviewText, this.rating, this.filter, this.sort)
+    this.submitted = true
+    if(this.myForm.valid) {
+      if(this.editMode) {
+        try {
+          await this.reviewService.patchReview(this.item_id, this.myForm.value.reviewText, this.myForm.value.rating, this.filter, this.sort)
+          this.submitted = false
+          this.cancelEditReview()
+        } catch(err: any) {}
+      }else {
+        try {
+          await this.reviewService.addReview(this.item_id, this.myForm.value.reviewText, this.myForm.value.rating, this.filter, this.sort)
+          this.submitted = false
+          this.myForm.reset()
+          this.myForm.get('rating')?.setValue(0);
+          this.myForm.get('reviewText')?.setValue('');
+          this.hoverState = this.myForm.get('rating')?.value || 0;
+        } catch(err: any) {}
+      }
     }
   }
   cancelEditReview() {
+    this.submitted = false;
     this.editModeChange.emit(false);
+    this.myForm.get('rating')?.setValue(0);
+    this.myForm.get('reviewText')?.setValue('');
+    this.hoverState = this.myForm.get('rating')?.value || 0;
   }
-  setRating(star: number): void {
-    this.rating = star;
+  setRating(star: number) {
+    this.myForm.get('rating')?.setValue(star);
   }
 
   enter(star: number): void {
     this.hoverState = star;
   }
 
-  leave(): void {
-    if (this.rating == 0) {
-      this.hoverState = 0;
-    } else {
-      this.hoverState = this.rating;
-    }
+  leave() {
+    this.hoverState = this.myForm.get('rating')?.value || 0;
   }
 }

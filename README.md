@@ -9,18 +9,18 @@
 
 # Wersja 0.0.5 - plany
 
-- Poprawa formularza w sklepie
+- Poprawa formularza w koszyku
 - Dodanie możliwości składania zamówień oraz zapisu ich w bazie danych
 - Ograniczenie możliwości składania recenzji na przedmiot tylko jak się go kupiło
 - Poprawa wyglądu na mniejszych urządzeniach
 
-# Wersja 0.0.4 - plany
+# Wersja 0.0.4 - 14.07.2024
 
-- Dodanie walidacji recenzji, edytowanych lub tworoznych
-- Poprawienie formularza recenzji
-- Usunięcie zmiennej check mówiącej, czy użytkownik może pisać recenzje i zastąpienie 
-jej czymś innym (np długość tablicy reviews), by uniknąc migania w paginacji
-- Dodanie potwierdzeń przy niektórych czynnościach (konta, recenzji, wylogowania się)
+- Dodanie walidacji recenzji, edytowanych lub tworoznych 
+- Poprawienie formularza recenzji 
+- Poprawa działania zmiennej sprawdzającej, czy użytkownik ma recenzje
+- Dodanie potwierdzeń przy niektórych czynnościach (usuniecia konta, usuniecia recenzji, wylogowania się) 
+- Poprawa zapisu danych do local storage
 
 # Wersja 0.0.3 - 12.07.2024
 

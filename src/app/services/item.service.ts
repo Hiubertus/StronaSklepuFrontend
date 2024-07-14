@@ -25,9 +25,7 @@ export class ItemService {
   async getItemFromDb(item_id: number) {
     this.http.get<Item>(`${this.apiUrl}/Item`, { params: new HttpParams().set('item_id', item_id.toString()) })
       .subscribe((data: Item) => {
-        //console.log(data)
         const index = this.items.findIndex(item => item.item_id == item_id);
-        console.log(index)
         if (index !== -1) {
           this.items[index] = data;
         } else {

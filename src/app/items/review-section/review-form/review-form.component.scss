@@ -68,3 +68,12 @@
     height: 20px;
   }
 }
+
+.error__wrapper {
+  position: relative;
+}
+.error__popup {
+  font-size: 14px;
+  text-align: center;
+  color: var(--Red);
+}

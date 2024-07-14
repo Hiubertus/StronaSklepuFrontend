@@ -105,7 +105,7 @@ export class RegisterComponent implements OnInit {
           this.myForm.value.password,
           this.myForm.value.email
         );
-        if (result.success) {
+        if (result) {
           this.myForm.reset();
           this.submitted = false;
           this.myForm.disable()

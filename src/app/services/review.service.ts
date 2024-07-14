@@ -46,23 +46,31 @@ export class ReviewService {
   }
 
   async addReview(item_id: number, text: string, rate: number, filter: "rate" | "date", sort: "asc" | "desc") {
-    const date = new Date(); // Pobierz aktualną datę
-    const review = {item_id, text, rate, date}; // Dodaj datę do obiektu review
+    const date = new Date();
+    const review = {item_id, text, rate, date};
     this.http.post(`${this.apiUrl}/Review`, review, {
       headers: {Authorization: `Bearer ${this.authService.getToken()}`}
-    }).subscribe(() => {
-      this.getReviewsFromDB(item_id,0, filter, sort);
-      this.itemService.getItemFromDb(item_id)
+    }).subscribe({
+      next: () => {
+        this.getReviewsFromDB(item_id,0, filter, sort);
+        this.itemService.getItemFromDb(item_id)
+      }, error: err => {
+        console.error('Błąd podczas pobierania recenzji:', err);
+      }
     });
   }
   async patchReview(item_id: number, text: string, rate: number, filter: "rate" | "date", sort: "asc" | "desc") {
     const date = new Date(); // Pobierz aktualną datę
-    const review = {item_id, text, rate, date}; // Dodaj datę do obiektu review
+    const review = {item_id, text, rate, date};
     this.http.patch(`${this.apiUrl}/Review`, review, {
       headers: {Authorization: `Bearer ${this.authService.getToken()}`}
-    }).subscribe(() => {
-      this.getReviewsFromDB(item_id,0, filter, sort);
-      this.itemService.getItemFromDb(item_id)
+    }).subscribe({
+      next: () => {
+        this.getReviewsFromDB(item_id,0, filter, sort);
+        this.itemService.getItemFromDb(item_id)
+      }, error: err => {
+        console.error('Błąd podczas aktualizacji recenzji:', err);
+      }
     });
   }
   async deleteReview(item_id: number, user_id: number, filter: "rate" | "date", sort: "asc" | "desc") {
@@ -72,9 +80,13 @@ export class ReviewService {
     this.http.delete(`${this.apiUrl}/Review`, {
       headers: {Authorization: `Bearer ${this.authService.getToken()}`},
       params: params
-    }).subscribe(() => {
-      this.getReviewsFromDB(item_id,0, filter, sort)
-      this.itemService.getItemFromDb(item_id)
+    }).subscribe({
+      next: () => {
+        this.getReviewsFromDB(item_id,0, filter, sort);
+        this.itemService.getItemFromDb(item_id)
+      }, error: err => {
+        console.error('Błąd podczas pobierania recenzji:', err);
+      }
     })
   }
 }

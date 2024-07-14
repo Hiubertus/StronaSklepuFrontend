@@ -1,21 +1,23 @@
 <p class="title__small" *ngIf="!loginStatus"> Zaloguj się aby moc dać recenzje: </p>
 <app-pagination
-  [check]="check"
+  [userHasReview]="userHasReview"
   [totalReviews]="totalReviews"
   [reviewsPerPage]="reviewsPerPage"
   [currentPage]="currentPage"
   (filterChanged)="handleFilterChange($event)"
   (sortChanged)="handleSortChange($event)"
-  (pageChanged)="onPageChange($event)">
-</app-pagination>
+  (pageChanged)="onPageChange($event)"
+></app-pagination>
 
 <app-review-form
-  [check]="check"
+  [userHasReview]="userHasReview"
   [loginStatus]="loginStatus"
   [item_id]="item_id"
   [filter]="filter"
   [sort]="sort"
   [editMode]="editMode"
+  [rating]="rating"
+  [reviewText]="reviewText"
   (editModeChange)="handleEditMode($event)"
 ></app-review-form>
 

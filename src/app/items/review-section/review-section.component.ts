@@ -35,16 +35,22 @@ export class ReviewSectionComponent implements OnInit, OnDestroy{
   reviews: Review[] = []
   loginStatusSubscription!: Subscription
   reviewSubscription!: Subscription
+
   item_id!: number;
   loginStatus!: boolean
   user!: User | null;
-  check: boolean = true;
+  userHasReview: boolean = true;
+
   filter: "rate" | "date" = "date"
   sort: "asc" | "desc" = "desc"
+
   @Input() totalReviews!: number;
   reviewsPerPage: number = 4;
   currentPage: number = 0;
   editMode: boolean = false;
+
+  reviewText: string = '';
+  rating: number = 0;
 
   constructor(private route: ActivatedRoute,
               private authService: AuthService,
@@ -56,8 +62,9 @@ export class ReviewSectionComponent implements OnInit, OnDestroy{
 
     await this.reviewService.getReviewsFromDB(this.item_id, this.currentPage, this.filter, this.sort);
     this.reviewSubscription = this.reviewService.reviewsChanged.subscribe((reviews: Review[]) => {
+      this.reviews = []
       this.reviews = reviews
-      this.userCanWriteReview()
+      this.userHasReview = this.reviews[0].user_id == this.user?.user_id
     })
 
     this.user = this.authService.getUser()
@@ -77,15 +84,17 @@ export class ReviewSectionComponent implements OnInit, OnDestroy{
     await this.reviewService.getReviewsFromDB(this.item_id, this.currentPage, this.filter, this.sort);
   }
   handleEditMode(event: any) {
-    this.editMode = event
+    this.editMode = event.editMode
+    this.reviewText = event.reviewText
+    this.rating = event.rating
   }
   ngOnDestroy() {
     this.loginStatusSubscription.unsubscribe()
     this.reviewSubscription.unsubscribe()
   }
-  userCanWriteReview() {
-    this.check = this.reviews[0].user_id == this.user?.user_id
-  }
+  // userCanWriteReview() {
+  //   this.check = this.reviews[0].user_id == this.user?.user_id
+  // }
 
   async onPageChange(page: number){
     this.currentPage = page;
