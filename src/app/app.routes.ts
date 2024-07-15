@@ -11,6 +11,7 @@ import {authGuardLogged, authGuardUnlogged} from "./services/auth-guard.service"
 import {NgModule} from "@angular/core";
 import {OrdersComponent} from "./main/user/orders/orders.component";
 import {ItemListComponent} from "./items/item-list/item-list.component";
+import {OrderDetailComponent} from "./main/user/orders/order/order-detail/order-detail.component";
 
 export const routes: Routes = [
   { path: 'home', component: ItemListComponent },
@@ -21,9 +22,8 @@ export const routes: Routes = [
   { path: 'register', component: RegisterComponent, canActivate: [authGuardUnlogged] },
   { path: 'user', component: UserComponent, canActivate: [authGuardLogged] },
   { path: 'user/data', component: UserDataComponent, canActivate: [authGuardLogged] },
-
-  // { path: 'user/orders', component: OrdersComponent, canActivate: [authGuardLogged] },
-  // { path: 'user/orders/:order', component: OrdersComponent, canActivate: [authGuardLogged] },
+  { path: 'user/orders', component: OrdersComponent, canActivate: [authGuardLogged] },
+  { path: 'user/orders/:order_id', component: OrderDetailComponent, canActivate: [authGuardLogged] },
   { path: '', redirectTo: '/home', pathMatch: 'full' }
 ];
 @NgModule({

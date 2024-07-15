@@ -1,0 +1,13 @@
+<div class="order__wrapper" (click)="redirectToOrder(order.order_id)">
+  <p> <mat-icon>tag</mat-icon> {{order.order_id}} </p>
+  <p> <mat-icon>sell</mat-icon> {{order.cost}}  zł</p>
+  <p> <mat-icon>credit_card</mat-icon> {{order.payment}}</p>
+  <p> <mat-icon>calendar_month</mat-icon> {{order.date | date:'dd-MM-yyyy'}}</p>
+  <div class="address__wrapper">
+    <p><mat-icon>pin_drop</mat-icon></p>
+    <div>
+      <p>{{order.city}}</p>
+      <p>{{ order.street }}{{ order.apartment ? '/' + order.apartment : '' }}</p>
+    </div>
+  </div>
+</div>

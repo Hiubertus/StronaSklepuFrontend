@@ -1,0 +1,29 @@
+.order__wrapper {
+  display: flex;
+  width: 320px;
+  margin: 20px;
+  padding: 20px;
+  flex-direction: column;
+  gap: 5px;
+  border: 3px solid var(--White);
+  border-radius: 30px;
+  cursor: pointer;
+  transition: 0.2s;
+  &:hover {
+    border: 3px solid var(--Blue);
+    p {
+      color: var(--Blue);
+    }
+  }
+  p {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    color: var(--White);
+    font-size: 18px;
+  }
+}
+.address__wrapper {
+  display: flex;
+  gap: 10px;
+}

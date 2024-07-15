@@ -1,0 +1,21 @@
+.wrapper {
+  display: flex;
+  width: clamp(360px, 100vw, 720px);
+  flex-direction: column;
+  gap: 20px;
+  margin-top: 50px;
+}
+.title {
+  color: var(--White);
+  font-size: 32px;
+  text-align: center;
+  font-weight: bolder;
+}
+.wrap {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  flex-direction:row;
+  flex-wrap: wrap;
+}
