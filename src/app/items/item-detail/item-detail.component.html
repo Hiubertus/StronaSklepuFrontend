@@ -6,28 +6,29 @@
     >
     </div>
     <div class="item__brief">
-      <p class="item__name"> {{item.name}}</p>
-      <p class="item__cost"> {{item.cost}} zł</p>
-      <div class="item__rating"><p class="item__number"> {{item.rating}}</p>
+      <p> {{item.name}}</p>
+      <p> {{item.cost}} zł</p>
+      <div class="item__section__wrapper">
+        <p> {{item.rating}}</p>
         <ng-container *ngFor="let star of [1, 2, 3, 4, 5]">
-          <mat-icon *ngIf="item.rating >= star" class="item__star">star</mat-icon>
-          <mat-icon *ngIf="item.rating >= star - 0.5 && item.rating < star" class="item__star">star_half</mat-icon>
-          <mat-icon *ngIf="item.rating < star - 0.5" class="item__star">star_outline</mat-icon>
+          <mat-icon class="colorYellow" *ngIf="item.rating >= star" >star</mat-icon>
+          <mat-icon class="colorYellow" *ngIf="item.rating >= star - 0.5 && item.rating < star">star_half</mat-icon>
+          <mat-icon  class="colorYellow" *ngIf="item.rating < star - 0.5">star_outline</mat-icon>
         </ng-container>
-        <p class="item__number">na {{ item.review_amount }}</p>
+        <p>na {{ item.review_amount }}</p>
       </div>
     </div>
   </div>
 
   <div class="item__description"> {{item.description}} </div>
   <div class="button__wrapper">
-    <button class="button__cart button" (click)="toggleCart(item.item_id)" [ngClass]="{'active': isItemInCart(item.item_id)}">
-      <p class="item__text">Dodaj do koszyka</p>
-      <mat-icon class="item__icon">shopping_basket</mat-icon>
+    <button class="button button__cart" (click)="toggleCart(item.item_id)" [ngClass]="{'active': isItemInCart(item.item_id)}">
+      <p>Dodaj do koszyka</p>
+      <mat-icon>shopping_basket</mat-icon>
     </button>
-    <button class="button__fav button" (click)="toggleFavorite(item.item_id)" [ngClass]="{'active': isItemInFav(item.item_id)}">
-      <p class="item__text">Dodaj do zapisanych</p>
-      <mat-icon class="item__icon">favorite</mat-icon>
+    <button class="button button__fav" (click)="toggleFavorite(item.item_id)" [ngClass]="{'active': isItemInFav(item.item_id)}">
+      <p>Dodaj do zapisanych</p>
+      <mat-icon>favorite</mat-icon>
     </button>
   </div>
 </div>

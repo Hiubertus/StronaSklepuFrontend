@@ -21,10 +21,8 @@ export class UserDataComponent implements OnInit {
 
   user!: User | null;
   check: boolean = false
-  info: boolean = false;
   errors: string[] = [];
   submitted: boolean = false;
-
   submitted2: boolean = false;
 
   constructor(private authService: AuthService) {

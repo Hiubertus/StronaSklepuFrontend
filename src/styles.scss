@@ -13,6 +13,7 @@ $BeatkaProjekt-theme: mat.define-theme((
 :root {
   @include mat.all-component-themes($BeatkaProjekt-theme);
 }
+//variables and clear
 * {
   margin: 0;
   padding: 0;
@@ -29,3 +30,77 @@ $BeatkaProjekt-theme: mat.define-theme((
   --Green:rgb(161, 238, 189);
 }
 
+//basic reusable styles
+.title {
+  color: var(--White);
+  font-size: 32px;
+  text-align: center;
+  font-weight: bolder;
+  margin: 20px 0;
+}
+.title__small {
+  color: var(--White);
+  font-size: 24px;
+  text-align: center;
+}
+.wrap {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+//form styles
+.form__wrapper {
+  position: relative;
+  display: flex;
+  width: 360px;
+  flex-direction: column;
+  align-items: center;
+  color: var(--White);
+}
+.form__input {
+  color: var(--White);
+  background-color: var(--Grey);
+  width: 180px;
+  height: 30px;
+  text-align: center;
+  margin-bottom: 25px;
+}
+.input__wrapper {
+  position: relative;
+  display: flex;
+  font-size: 14px;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.submit__button {
+  background-color: var(--Grey);
+  color: var(--White);
+  align-self: center;
+  width: 200px;
+  padding: 10px 0;
+  border: 2px solid var(--White);
+  border-radius: 20px;
+  cursor: pointer;
+  transition: 0.2s;
+  font-size: 20px;
+  margin:0 0 25px 0;
+  &:hover {
+    border: 2px solid var(--Blue);
+    color: var(--Blue);
+  }
+}
+.input__disabled {
+  background-color: rgba(57, 62, 70,.5);
+}
+.error__popup {
+  position: absolute;
+  width:180px;
+  bottom: 5px;
+  font-size: 14px;
+  text-align: center;
+  color: var(--Red);
+}
+.successful {
+  color: var(--Green);
+}

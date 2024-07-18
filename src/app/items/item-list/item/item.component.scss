@@ -6,7 +6,7 @@
   background-color: var(--Black);
   border-radius: 20px;
   font-size: 20px;
-  margin: 20px;
+  margin: 0 20px;
   transition: 0.2s;
   cursor: pointer;
   &:hover {
@@ -16,48 +16,28 @@
 .item__wrapper {
   display: flex;
   flex-direction: column;
-  //width: 240px;
+  gap: 10px;
+  margin: 10px 20px;
   color: var(--White);
 }
-//.item__image {
-//  width:210px;
-//  height:210px;
-//  margin: 20px 0 0 0;
-//  align-self: center;
-//}
 .item__image {
   width: 210px;
   height: 210px;
   margin: 20px 0 0 0;
   align-self: center;
-  background-size: cover; /* Dopasowuje obrazek do rozmiaru diva, przycina zachowując proporcje */
-  background-position: center; /* Centruje obrazek */
-  background-repeat: no-repeat; /* Zapobiega powtarzaniu się obrazka */
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
 }
-.item__name {
-  padding:5px 0 5px 15px;
-}
-.item__cost {
-  padding:5px 0 5px 15px;
-}
-.item__rating {
-  padding:5px 0 5px 15px;
-  display: flex;
-  align-items: center;
-}
-.item__number {
-  margin: 0 10px 0 0;
-  &:last-child {
-    margin: 0 0 0 10px;
-  }
-}
-.item__star {
-  display: flex;
-  align-self: center;
-  justify-content: center;
+.star {
   color: var(--Yellow);
 }
-button {
+.item__rating {
+  display: flex;
+  gap: 3px
+}
+
+.button {
   position: absolute;
   background-color: transparent;
   border: 2px solid transparent;
@@ -76,6 +56,14 @@ button {
     border: 2px solid var(--Green);
   }
 }
+.button__fav {
+  right:15px;
+  top:15px;
+  &:hover {
+    color: var(--Red);
+    border: 2px solid var(--Red);
+  }
+}
 .active {
   &:nth-child(1) {
     color: var(--Green);
@@ -86,11 +74,4 @@ button {
     border: 2px solid var(--Red);
   }
 }
-.button__fav {
-  right:15px;
-  top:15px;
-  &:hover {
-    color: var(--Red);
-    border: 2px solid var(--Red);
-  }
-}
+

@@ -31,7 +31,6 @@ import {PaginationComponent} from "./pagination/pagination.component";
   styleUrl: './review-section.component.scss'
 })
 export class ReviewSectionComponent implements OnInit, OnDestroy{
-
   reviews: Review[] = []
   loginStatusSubscription!: Subscription
   reviewSubscription!: Subscription
@@ -39,7 +38,7 @@ export class ReviewSectionComponent implements OnInit, OnDestroy{
   item_id!: number;
   loginStatus!: boolean
   user!: User | null;
-  userHasReview: boolean = true;
+  userHasReview!: boolean;
 
   filter: "rate" | "date" = "date"
   sort: "asc" | "desc" = "desc"
@@ -59,20 +58,26 @@ export class ReviewSectionComponent implements OnInit, OnDestroy{
 
   async ngOnInit() {
     this.item_id = this.route.snapshot.params['item_id']
-
-    await this.reviewService.getReviewsFromDB(this.item_id, this.currentPage, this.filter, this.sort);
-    this.reviewSubscription = this.reviewService.reviewsChanged.subscribe((reviews: Review[]) => {
-      this.reviews = []
-      this.reviews = reviews
-      this.userHasReview = this.reviews[0].user_id == this.user?.user_id
-    })
-
     this.user = this.authService.getUser()
     this.loginStatus = await this.authService.getLoginStatus()
     this.loginStatusSubscription = this.authService.loginStatusChanged.subscribe((loginStatusData: boolean) => {
       this.user = this.authService.getUser()
       this.loginStatus = loginStatusData;
     });
+
+    await this.reviewService.getReviewsFromDB(this.item_id, this.currentPage, this.filter, this.sort);
+    this.reviewSubscription = this.reviewService.reviewsChanged.subscribe((reviews: Review[]) => {
+      this.reviews = []
+      this.reviews = reviews
+      if(reviews.length > 0) {
+        this.userHasReview = this.reviews[0].user_id == this.user?.user_id
+      }
+      else {
+        this.userHasReview = false;
+      }
+    })
+
+
   }
   async handleFilterChange(filter: "date" | "rate") {
     this.filter = filter
@@ -92,9 +97,6 @@ export class ReviewSectionComponent implements OnInit, OnDestroy{
     this.loginStatusSubscription.unsubscribe()
     this.reviewSubscription.unsubscribe()
   }
-  // userCanWriteReview() {
-  //   this.check = this.reviews[0].user_id == this.user?.user_id
-  // }
 
   async onPageChange(page: number){
     this.currentPage = page;

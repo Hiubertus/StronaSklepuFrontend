@@ -13,8 +13,7 @@ import {Router, RouterLink, RouterLinkActive} from "@angular/router";
   styleUrl: './user.component.scss'
 })
 export class UserComponent {
-  constructor(private router: Router, private authService: AuthService) {
-  }
+  constructor(private router: Router, private authService: AuthService) {}
 
   async logoutUser() {
     if(confirm("Czy napewno chcesz się wylogować?")) {

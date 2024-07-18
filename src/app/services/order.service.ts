@@ -1,21 +1,46 @@
 import {Injectable, OnInit} from '@angular/core';
 import {Order} from "../models/order.model";
-import {HttpClient} from "@angular/common/http";
+import {HttpClient, HttpParams} from "@angular/common/http";
 import {environment} from "../../enviroments/enviroment";
 import {AuthService} from "./auth.service";
 import {Subject} from "rxjs";
+import {ItemService} from "./item.service";
 
 @Injectable({
   providedIn: 'root'
 })
 export class OrderService implements OnInit{
   apiUrl = environment.apiUrl
-  orders: Order[] = []
+  order1!: Order;
+  order2!: Order;
+  orders: Order[] = [this.order1 = {
+    order_id: 1,
+    items: this.itemService.getItems(),
+    cost: 59.98,
+    apartment: '',
+    street: 'Kurska 5',
+    city: 'Lublin',
+    payment: 'Karta',
+    date: '2024-07-07',
+    status: 'W toku'
+  },
+  this.order2 = {
+    order_id: 2,
+    items: this.itemService.getItems(),
+    cost: 59.98,
+    apartment: '32',
+    street: 'Sezamkowa 69',
+    city: 'Warszawa',
+    payment: 'Blik',
+    date: '2024-07-10',
+    status: 'Wysłane'
+  }]
+
   ordersChange = new Subject<Order[]>()
-  constructor(private http: HttpClient,private authService: AuthService) { }
+  constructor(private http: HttpClient,private authService: AuthService, private itemService: ItemService) { }
   ngOnInit() {
   }
-  async getOrderdFromDb() {
+  async getOrdersFromDb() {
     this.http.get<Order[]>(`${this.apiUrl}/Orders`, {
       headers: {Authorization: `Bearer ${this.authService.getToken()}`}
     }).subscribe((data) => {
@@ -23,5 +48,27 @@ export class OrderService implements OnInit{
       this.ordersChange.next(this.orders);
     })
   }
-
+  async getOrderFromDb(order_id: number) {
+    let params = new HttpParams()
+      .append('order_id',order_id)
+    this.http.get<Order>(`${this.apiUrl}/Order`, {
+      headers: {Authorization: `Bearer ${this.authService.getToken()}`},
+      params: params
+    }).subscribe((data) => {
+      const index = this.orders.findIndex(order => order.order_id == order_id);
+      if (index !== -1) {
+        this.orders[index] = data;
+      } else {
+        this.orders.push(data);
+      }
+      this.ordersChange.next(this.orders);
+    })
+  }
+  getOrders() {
+    return this.orders.slice()
+  }
+  getOrder(order_id: number) {
+    console.log(this.orders[1].items)
+    return this.orders.find(order => order.order_id == order_id)!;
+  }
 }

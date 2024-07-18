@@ -2,8 +2,6 @@ import {RouterModule, Routes} from '@angular/router';
 import {ItemDetailComponent} from "./items/item-detail/item-detail.component";
 import {CartComponent} from "./main/cart/cart.component";
 import {FavoriteComponent} from "./main/favorite/favorite.component";
-import {LoginComponent} from "./main/user/auth/login/login.component";
-import {RegisterComponent} from "./main/user/auth/register/register.component";
 import {UserComponent} from "./main/user/user.component";
 import {UserDataComponent} from "./main/user/user-data/user-data.component";
 
@@ -12,14 +10,14 @@ import {NgModule} from "@angular/core";
 import {OrdersComponent} from "./main/user/orders/orders.component";
 import {ItemListComponent} from "./items/item-list/item-list.component";
 import {OrderDetailComponent} from "./main/user/orders/order/order-detail/order-detail.component";
+import {AuthComponent} from "./main/user/auth/auth.component";
 
 export const routes: Routes = [
   { path: 'home', component: ItemListComponent },
   { path: 'item-detail/:item_id', component: ItemDetailComponent },
   { path: 'cart', component: CartComponent },
+  { path: 'auth/:authMode' , component: AuthComponent, canActivate: [authGuardUnlogged] },
   { path: 'favorite', component: FavoriteComponent },
-  { path: 'login', component: LoginComponent, canActivate: [authGuardUnlogged] },
-  { path: 'register', component: RegisterComponent, canActivate: [authGuardUnlogged] },
   { path: 'user', component: UserComponent, canActivate: [authGuardLogged] },
   { path: 'user/data', component: UserDataComponent, canActivate: [authGuardLogged] },
   { path: 'user/orders', component: OrdersComponent, canActivate: [authGuardLogged] },
