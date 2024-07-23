@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {OrderComponent} from "./order/order.component";
 import {Order} from "../../../models/order.model";
-import {NgForOf} from "@angular/common";
+import {NgForOf, NgIf} from "@angular/common";
 import {OrderService} from "../../../services/order.service";
 
 @Component({
@@ -9,7 +9,8 @@ import {OrderService} from "../../../services/order.service";
   standalone: true,
   imports: [
     OrderComponent,
-    NgForOf
+    NgForOf,
+    NgIf
   ],
   templateUrl: './orders.component.html',
   styleUrl: './orders.component.scss'

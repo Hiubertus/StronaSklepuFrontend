@@ -17,7 +17,7 @@ ul {
   max-width: 1200px;
   justify-content: space-around;
   li {
-    width: 25%;
+    width: 20%;
     &:hover {
       a {
         color: var(--Blue);
@@ -47,6 +47,9 @@ ul {
 }
 .show4 {
   animation: visible 0.375s linear 0.375s both;
+}
+.show5 {
+  animation: visible 0.375s linear 0.5s both;
 }
 
 @keyframes visible {

@@ -1,4 +1,4 @@
-<div class="pagination">
+<div class="pagination" *ngIf="totalReviews!=0">
   <button (click)="onFilterChange()">
     <mat-icon *ngIf="filter=='rate'">star</mat-icon>
     <mat-icon *ngIf="filter=='date'">calendar_month</mat-icon>

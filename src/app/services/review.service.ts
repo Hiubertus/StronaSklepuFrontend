@@ -45,7 +45,7 @@ export class ReviewService {
     });
   }
 
-  async addReview(item_id: number, text: string, rate: number, filter: "rate" | "date", sort: "asc" | "desc") {
+  async postReview(item_id: number, text: string, rate: number, filter: "rate" | "date", sort: "asc" | "desc") {
     const date = new Date();
     const review = {item_id, text, rate, date};
     this.http.post(`${this.apiUrl}/Review`, review, {

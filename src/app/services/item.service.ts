@@ -9,15 +9,16 @@ import {environment} from "../../enviroments/enviroment";
 @Injectable({
   providedIn: 'root'
 })
+
 export class ItemService {
   apiUrl = environment.apiUrl
 
   private items: Item[] = []
-  private cartItems: number[] = []
+  private cartItems: {item_id: number, quantity: number}[] = []
   private favoriteItems: number[] = []
 
   itemsChanged = new Subject<Item[]>();
-  cartChanged = new Subject<Item[]>();
+  cartChanged = new Subject<{item: Item, quantity: number}[]>()
   favoriteChanged = new Subject<Item[]>();
 
   constructor(private http: HttpClient, private authService: AuthService, private localStorage: LocalStorageService) {
@@ -48,6 +49,14 @@ export class ItemService {
       this.favoriteChanged.next(this.getFavorite())
     })
   }
+  setItemQuantity(item: {item_id: number, quantity: number}) {
+    const itemIndex = this.cartItems.findIndex(i => i.item_id == item.item_id);
+    if (itemIndex != -1) {
+      this.cartItems[itemIndex].quantity = item.quantity;
+      this.localStorage.saveCart(this.cartItems);
+      this.cartChanged.next(this.getCart());
+    }
+  }
 
   getItems() {
     return this.items.slice()
@@ -58,9 +67,16 @@ export class ItemService {
   }
 
   getCart() {
-    return this.cartItems.map(item_id => this.getItem(item_id)).filter(item => item != null);
+    return this.cartItems
+      .map(cartItem => {
+        const item = this.getItem(cartItem.item_id);
+        if (item) {
+          return { item, quantity: cartItem.quantity };
+        }
+        return null;
+      })
+      .filter(cartItem => cartItem != null) as { item: Item, quantity: number }[];
   }
-
   getFavorite() {
     return this.favoriteItems.map(item_id => this.getItem(item_id)).filter(item => item != null);
   }
@@ -80,17 +96,18 @@ export class ItemService {
   }
 
   isItemInCart(item_id: number): boolean {
-    return this.cartItems.includes(item_id);
+    return this.cartItems.some(cartItem => cartItem.item_id == item_id);
   }
+
 
   isItemInFav(item_id: number): boolean {
     return this.favoriteItems.includes(item_id);
   }
 
   toggleCart(item_id: number) {
-    const itemIndex = this.cartItems.indexOf(item_id);
+    const itemIndex = this.cartItems.findIndex(i => i.item_id == item_id);
     if (itemIndex === -1) {
-      this.cartItems.push(item_id);
+      this.cartItems.push({item_id: item_id, quantity: 1});
     } else {
       this.cartItems.splice(itemIndex, 1);
     }

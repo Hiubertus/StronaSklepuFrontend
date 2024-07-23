@@ -1,9 +1,9 @@
-import {Component, Input} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {MatIconModule} from "@angular/material/icon";
 import {Item} from "../../../models/item.model";
 import {ItemService} from "../../../services/item.service";
-import {NgClass, NgForOf, NgIf, NgStyle} from "@angular/common";
-import {FormsModule} from "@angular/forms";
+import {NgClass, NgForOf, NgIf, NgStyle, SlicePipe} from "@angular/common";
+import {FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
 import {Router} from "@angular/router";
 
 @Component({
@@ -15,16 +15,51 @@ import {Router} from "@angular/router";
     FormsModule,
     NgIf,
     NgForOf,
-    NgStyle
+    NgStyle,
+    SlicePipe,
+    ReactiveFormsModule
   ],
   templateUrl: './item.component.html',
   styleUrl: './item.component.scss'
 })
-export class ItemComponent {
-  @Input() item!: Item // Wykrzyknik sygnuje, że wiem, że te dane zostaną ustawione
+export class ItemComponent implements OnInit{
+  @Input() item!: Item
+  @Input() itemQuantity!: number | null
+  @Input() showRating!: boolean
+  @Input() showButtonFavorite!: boolean
+  @Input() showButtonCart!: boolean
+  @Input() showDescription!: boolean
+  @Input() clickable!: boolean
+
+  @Input() showQuantity!: 'input' | 'number' | false
+  @Input() whichButtonFirst!: 'cart' | 'fav'
+  @Input() itemSize!: 'small' | 'medium' | 'big'
+  @Input() imageSize!: 'small' | 'medium' | 'big'
+  @Input() columnAmount!: 'one' | 'two'
+  @Input() buttonPlacment!: 'bottom' | 'side'
+
+  @Output() quantityChange = new EventEmitter<{ item_id: number, quantity: number }>();
+  quantityForm!: FormGroup;
   constructor(private itemService: ItemService, private router: Router) {
   }
+  ngOnInit() {
+    this.quantityForm = new FormGroup({
+      quantity: new FormControl(this.itemQuantity || 1, [
+        Validators.required,
+        Validators.pattern('^[1-9][0-9]*$')
+      ])
+    })
+  }
 
+  onQuantityChange() {
+    if (!isNaN(this.quantityForm.get('quantity')?.value) && this.quantityForm.get('quantity')?.value >= 1 && this.quantityForm.valid) {
+      this.quantityChange.emit({ item_id: this.item.item_id, quantity: this.quantityForm.get('quantity')?.value });
+    }
+    else {
+      this.quantityForm.get('quantity')?.setValue(1);
+      this.quantityChange.emit({ item_id: this.item.item_id, quantity: this.quantityForm.get('quantity')?.value });
+    }
+  }
   cart(event: Event, item_id: number) {
     event.stopPropagation();
     this.itemService.toggleCart(item_id);
@@ -44,6 +79,8 @@ export class ItemComponent {
   }
 
   redirectToItem(item_id: number): void {
-    this.router.navigate(['/item-detail', item_id]);
+    if(this.clickable) {
+      this.router.navigate(['shop/item-detail', item_id]);
+    }
   }
 }

@@ -33,6 +33,7 @@ export class ReviewFormComponent implements OnInit, OnChanges{
   @Input() sort!: "asc" | "desc"
   @Input() editMode!: boolean
   @Output() editModeChange = new EventEmitter<boolean>();
+  @Output() formSubmitted = new EventEmitter<void>();
 
   @Input() reviewText!: string;
   @Input() rating!: number;
@@ -75,7 +76,7 @@ export class ReviewFormComponent implements OnInit, OnChanges{
         } catch(err: any) {}
       }else {
         try {
-          await this.reviewService.addReview(this.item_id, this.myForm.value.reviewText, this.myForm.value.rating, this.filter, this.sort)
+          await this.reviewService.postReview(this.item_id, this.myForm.value.reviewText, this.myForm.value.rating, this.filter, this.sort)
           this.submitted = false
           this.myForm.reset()
           this.myForm.get('rating')?.setValue(0);

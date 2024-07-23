@@ -11,10 +11,12 @@ import {OrdersComponent} from "./main/user/orders/orders.component";
 import {ItemListComponent} from "./items/item-list/item-list.component";
 import {OrderDetailComponent} from "./main/user/orders/order/order-detail/order-detail.component";
 import {AuthComponent} from "./main/user/auth/auth.component";
+import {HomeComponent} from "./main/home/home.component";
 
 export const routes: Routes = [
-  { path: 'home', component: ItemListComponent },
-  { path: 'item-detail/:item_id', component: ItemDetailComponent },
+  { path: 'home', component: HomeComponent},
+  { path: 'shop', component: ItemListComponent },
+  { path: 'shop/item-detail/:item_id', component: ItemDetailComponent },
   { path: 'cart', component: CartComponent },
   { path: 'auth/:authMode' , component: AuthComponent, canActivate: [authGuardUnlogged] },
   { path: 'favorite', component: FavoriteComponent },

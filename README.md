@@ -6,13 +6,19 @@
 - Dodanie paginacji na przedmioty
 - Dodanie wyszukiwarki na podstawie tagów
 - Dodanie walidacji lub wyświetlania błędów na wielu aspektach strony
-
-# Wersja 0.0.5 - plany
-
-- Poprawa formularza w koszyku
 - Dodanie możliwości składania zamówień oraz zapisu ich w bazie danych
 - Ograniczenie możliwości składania recenzji na przedmiot tylko jak się go kupiło
-- Poprawa wyglądu na mniejszych urządzeniach
+- Pełne zaimplementowanie zamówień
+- Modyfikacja formularza w profilu oraz w sklepie
+
+# Wersja 0.0.5 - 23.07.2024
+
+- Poprawa formularza w koszyku 
+- Dodanie ponownego wykorzystywania komponentu w ItemDetail celu zmniejszenia powtarzania kodu
+- Dodanie możliwości personalizacji komponentu Item zależnie od potrzeb
+- Optymalizacja kodu
+- Dodanie ilości produktów w koszyku
+- Poprawa wyglądu na mniejszych urządzeniach 
 
 # Wersja 0.0.4 - 14.07.2024
 

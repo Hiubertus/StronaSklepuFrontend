@@ -38,7 +38,7 @@ export class ReviewSectionComponent implements OnInit, OnDestroy{
   item_id!: number;
   loginStatus!: boolean
   user!: User | null;
-  userHasReview!: boolean;
+  userHasReview: boolean=true;
 
   filter: "rate" | "date" = "date"
   sort: "asc" | "desc" = "desc"

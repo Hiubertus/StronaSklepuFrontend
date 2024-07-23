@@ -5,6 +5,7 @@ import {environment} from "../../enviroments/enviroment";
 import {AuthService} from "./auth.service";
 import {Subject} from "rxjs";
 import {ItemService} from "./item.service";
+import {Item} from "../models/item.model";
 
 @Injectable({
   providedIn: 'root'
@@ -16,6 +17,7 @@ export class OrderService implements OnInit{
   orders: Order[] = [this.order1 = {
     order_id: 1,
     items: this.itemService.getItems(),
+    items_quantity: [1],
     cost: 59.98,
     apartment: '',
     street: 'Kurska 5',
@@ -27,6 +29,7 @@ export class OrderService implements OnInit{
   this.order2 = {
     order_id: 2,
     items: this.itemService.getItems(),
+    items_quantity: [1],
     cost: 59.98,
     apartment: '32',
     street: 'Sezamkowa 69',
@@ -62,6 +65,19 @@ export class OrderService implements OnInit{
         this.orders.push(data);
       }
       this.ordersChange.next(this.orders);
+    })
+  }
+  async postOrder(items: {item: Item, quantity: number}[], name: string, surname: string, city: string ,street: string, apartment: string, payment: string, cost: number) {
+    const date = new Date()
+    const order = {items, date , name, surname, city, street, apartment, payment, cost}
+    this.http.post<any>(`${this.apiUrl}/Order`, order, {
+      headers: {Authorization: `Bearer ${this.authService.getToken()}`}
+    }).subscribe( {
+      next: data =>{
+      },
+      error: err =>{
+
+      }
     })
   }
   getOrders() {

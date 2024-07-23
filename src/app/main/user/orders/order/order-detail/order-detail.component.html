@@ -1,5 +1,6 @@
 <div *ngFor="let item of order.items">
   <div *ngIf="item">
+    <p>test</p>
     <div
       class="item__image"
       [ngStyle]="{'background-image': item.image ? 'url(' + item.image + ')' : 'none'}"

@@ -1,7 +1,21 @@
 <p class="title">Sklep</p>
-<app-item
-  class="wrap"
-  *ngFor="let itemEl of items;"
-  [item] = "itemEl"
-></app-item>
+<div class="items__wrapper">
+  <app-item
+    class="wrap"
+    *ngFor="let itemEl of items;"
+    [item] = "itemEl"
+    [itemQuantity]="null"
+    [showQuantity]="false"
+    [showRating]="true"
+    [showButtonFavorite]="true"
+    [showButtonCart]="true"
+    [showDescription]="false"
+    [clickable]="true"
+    [columnAmount]="'one'"
+    [imageSize]="'medium'"
+    [itemSize]="'medium'"
+    [buttonPlacment]="'side'"
+    [whichButtonFirst]="'fav'"
+  ></app-item>
+</div>
 

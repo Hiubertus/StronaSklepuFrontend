@@ -1,37 +1,18 @@
-<div class="item" *ngIf="item">
-  <div class="item__wrap">
-    <div
-      class="item__image"
-      [ngStyle]="{'background-image': item.image ? 'url(' + item.image + ')' : 'none'}"
-    >
-    </div>
-    <div class="item__brief">
-      <p> {{item.name}}</p>
-      <p> {{item.cost}} zł</p>
-      <div class="item__section__wrapper">
-        <p> {{item.rating}}</p>
-        <ng-container *ngFor="let star of [1, 2, 3, 4, 5]">
-          <mat-icon class="colorYellow" *ngIf="item.rating >= star" >star</mat-icon>
-          <mat-icon class="colorYellow" *ngIf="item.rating >= star - 0.5 && item.rating < star">star_half</mat-icon>
-          <mat-icon  class="colorYellow" *ngIf="item.rating < star - 0.5">star_outline</mat-icon>
-        </ng-container>
-        <p>na {{ item.review_amount }}</p>
-      </div>
-    </div>
-  </div>
-
-  <div class="item__description"> {{item.description}} </div>
-  <div class="button__wrapper">
-    <button class="button button__cart" (click)="toggleCart(item.item_id)" [ngClass]="{'active': isItemInCart(item.item_id)}">
-      <p>Dodaj do koszyka</p>
-      <mat-icon>shopping_basket</mat-icon>
-    </button>
-    <button class="button button__fav" (click)="toggleFavorite(item.item_id)" [ngClass]="{'active': isItemInFav(item.item_id)}">
-      <p>Dodaj do zapisanych</p>
-      <mat-icon>favorite</mat-icon>
-    </button>
-  </div>
-</div>
+<app-item
+  [item]="item"
+  [itemQuantity]="null"
+  [showQuantity]="false"
+  [showRating]="true"
+  [showButtonFavorite]="true"
+  [showButtonCart]="true"
+  [showDescription]="true"
+  [clickable]="false"
+  [columnAmount]="'two'"
+  [imageSize]="'big'"
+  [itemSize]="'big'"
+  [buttonPlacment]="'side'"
+  [whichButtonFirst]="'fav'"
+></app-item>
 
 <div class="wrapper" *ngIf="item">
   <p class="title">Opinie:</p>

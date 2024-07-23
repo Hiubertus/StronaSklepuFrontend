@@ -1,19 +1,63 @@
 <p class="title">Koszyk</p>
 <p class="title__small" *ngIf="items.length == 0">Koszyk jest pusty</p>
-<app-item
+<div class="title__small__margin" *ngIf="items.length != 0 && !loginStatus">Zaloguj się by móc kupić produkty</div>
+<div class="items__wrapper">
+  <app-item
     class="wrap"
-    *ngFor="let itemEl of items"
-    [item] = "itemEl"
-></app-item>
-<div *ngIf="items.length != 0 && !loginStatus" class="title__small margin">Zaloguj się by móc kupić produkty</div>
+    *ngFor="let itemEl of items;"
+    [item] = "itemEl.item"
+    [itemQuantity]="itemEl.quantity"
+    [showQuantity]="'input'"
+    [showRating]="false"
+    [showButtonFavorite]="false"
+    [showButtonCart]="true"
+    [showDescription]="false"
+    [clickable]="false"
+    [columnAmount]="'one'"
+    [imageSize]="'medium'"
+    [itemSize]="'medium'"
+    [buttonPlacment]="'side'"
+    [whichButtonFirst]="'cart'"
+    (quantityChange)="handleQuantityChange($event)"
+  ></app-item>
+</div>
 <div class="wrapper" *ngIf="items.length != 0 && loginStatus">
 
-
+  <p class="title">Złóż zamówienie</p>
   <form class="form__wrapper" [formGroup]="addressForm">
-    <p class="title">Podaj dane adresowe</p>
 
     <div class="input__wrapper">
-      <p>miasto:</p>
+      <p>Imie:</p>
+      <input type="text" class="form__input" formControlName="name" >
+      <div class="error__popup">
+        <p *ngIf="addressForm.get('name')?.hasError('required') && submitted">Puste Pole</p>
+        <p *ngIf="addressForm.get('name')?.hasError('maxlength') && submitted">Za długie</p>
+        <p *ngIf="addressForm.get('name')?.hasError('minlength') && submitted">Za krótkie</p>
+        <p *ngIf="addressForm.get('name')?.hasError('pattern')
+        && !addressForm.get('name')?.hasError('minlength')
+        && !addressForm.get('name')?.hasError('maxlength')
+        && !addressForm.get('name')?.hasError('required')
+        && submitted">Tylko litery</p>
+      </div>
+    </div>
+
+    <div class="input__wrapper">
+      <p>Nazwisko:</p>
+      <input type="text" class="form__input" formControlName="surname" >
+      <div class="error__popup">
+        <p *ngIf="addressForm.get('surname')?.hasError('required') && submitted">Puste Pole</p>
+        <p *ngIf="addressForm.get('surname')?.hasError('maxlength') && submitted">Za długie</p>
+        <p *ngIf="addressForm.get('surname')?.hasError('minlength') && submitted">Za krótkie</p>
+        <p *ngIf="addressForm.get('surname')?.hasError('pattern')
+        && !addressForm.get('surname')?.hasError('minlength')
+        && !addressForm.get('surname')?.hasError('maxlength')
+        && !addressForm.get('surname')?.hasError('required')
+        && submitted">Tylko litery</p>
+      </div>
+    </div>
+
+    <div class="input__wrapper">
+      <p>Miasto:</p>
       <input type="text" class="form__input" formControlName="city" >
       <div class="error__popup">
         <p *ngIf="addressForm.get('city')?.hasError('required') && submitted">Puste Pole</p>
@@ -21,7 +65,7 @@
     </div>
 
     <div class="input__wrapper">
-      <p>ulica:</p>
+      <p>Ulica:</p>
       <input type="text" class="form__input" formControlName="street" >
       <div class="error__popup">
         <p *ngIf="addressForm.get('street')?.hasError('required') && submitted">Puste Pole</p>
@@ -29,11 +73,8 @@
     </div>
 
     <div class="input__wrapper">
-      <p>apartament:</p>
-      <input type="text" class="form__input" formControlName="apartment">
-      <div class="error__popup">
-        <p *ngIf="addressForm.get('apartment')?.hasError('required') && submitted">Apartament</p>
-      </div>
+      <p>Nr mieszkania (opcjonalne):</p>
+      <input type="text" class="form__input" formControlName="apartment" >
     </div>
   </form>
 
