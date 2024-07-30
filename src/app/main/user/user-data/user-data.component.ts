@@ -3,13 +3,15 @@ import {AbstractControl, FormControl, FormGroup, ReactiveFormsModule, ValidatorF
 import {User} from "../../../models/user.model";
 import {CommonModule} from "@angular/common";
 import {AuthService} from "../../../services/auth.service";
+import {ReturnButtonComponent} from "../../../return-button/return-button.component";
 
 @Component({
   selector: 'app-user-data',
   standalone: true,
   imports: [
     ReactiveFormsModule,
-    CommonModule
+    CommonModule,
+    ReturnButtonComponent
   ],
   templateUrl: './user-data.component.html',
   styleUrl: './user-data.component.scss'

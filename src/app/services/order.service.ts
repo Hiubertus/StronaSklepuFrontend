@@ -6,39 +6,15 @@ import {AuthService} from "./auth.service";
 import {Subject} from "rxjs";
 import {ItemService} from "./item.service";
 import {Item} from "../models/item.model";
+import {Status} from "../models/status.model";
 
 @Injectable({
   providedIn: 'root'
 })
 export class OrderService implements OnInit{
   apiUrl = environment.apiUrl
-  // order1!: Order;
-  // order2!: Order;
   orders: Order[] = [];
-  // orders: Order[] = [this.order1 = {
-  //   order_id: 1,
-  //   items: this.itemService.getItems(),
-  //   items_quantity: [1],
-  //   cost: 59.98,
-  //   apartment: '',
-  //   street: 'Kurska 5',
-  //   city: 'Lublin',
-  //   payment: 'Karta',
-  //   date: '2024-07-07',
-  //   status: 'W toku'
-  // },
-  // this.order2 = {
-  //   order_id: 2,
-  //   items: this.itemService.getItems(),
-  //   items_quantity: [1],
-  //   cost: 59.98,
-  //   apartment: '32',
-  //   street: 'Sezamkowa 69',
-  //   city: 'Warszawa',
-  //   payment: 'Blik',
-  //   date: '2024-07-10',
-  //   status: 'Wysłane'
-  // }]
+
 
   ordersChange = new Subject<Order[]>()
   constructor(private http: HttpClient,private authService: AuthService, private itemService: ItemService) { }

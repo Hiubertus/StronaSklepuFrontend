@@ -4,15 +4,17 @@ import {Order} from "../../../models/order.model";
 import {NgForOf, NgIf} from "@angular/common";
 import {OrderService} from "../../../services/order.service";
 import {Subscription} from "rxjs";
+import {ReturnButtonComponent} from "../../../return-button/return-button.component";
 
 @Component({
   selector: 'app-orders',
   standalone: true,
-  imports: [
-    OrderComponent,
-    NgForOf,
-    NgIf
-  ],
+    imports: [
+        OrderComponent,
+        NgForOf,
+        NgIf,
+        ReturnButtonComponent
+    ],
   templateUrl: './orders.component.html',
   styleUrl: './orders.component.scss'
 })

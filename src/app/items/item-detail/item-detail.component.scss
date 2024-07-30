@@ -1,8 +1,12 @@
-
 .wrapper {
   display: flex;
   flex-direction: column;
   justify-content: center;
   width: clamp(360px , 100vw, 650px);
   margin-bottom: 100px;
+}
+.position__relative {
+    position: relative;
+    display: flex;
+    flex-direction: column;
 }

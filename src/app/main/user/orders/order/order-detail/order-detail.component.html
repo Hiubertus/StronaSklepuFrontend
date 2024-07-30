@@ -1,24 +1,31 @@
-<p class="title">Zamówienie</p>
-<div class="wrapper" *ngIf="order">
-  <div class="section__wrapper">
-    <p class="title__small">Dane zamówienia:</p>
-    <app-order
-      [order]="order"
-      [showBorder]="false"
-      [clickable]="false"
-      [useMargin]="false"
-      [dataLength]="'full'"
-    ></app-order>
-    <div class="placeholder"></div>
-    <div class="placeholder"></div>
-  </div>
 
-  <div class="section__wrapper">
-    <p class="title__small">Zakupione przedmioty:</p>
-    <app-carousel
-      [order]="order"
-    ></app-carousel>
+<div class="position__relative">
+  <app-return-button></app-return-button>
+  <p class="title">Zamówienie</p>
+  <div class="wrapper" *ngIf="order">
+
+    <div class="section__wrapper">
+      <p class="title__small">Dane zamówienia:</p>
+      <app-order
+        [order]="order"
+        [showBorder]="false"
+        [clickable]="false"
+        [useMargin]="false"
+        [dataLength]="'full'"
+      ></app-order>
+      <div class="placeholder"></div>
+      <div class="placeholder"></div>
+    </div>
+
+    <div class="section__wrapper">
+      <p class="title__small">Zakupione przedmioty:</p>
+      <app-carousel
+        [order]="order"
+      ></app-carousel>
+    </div>
   </div>
+  <app-statuses
+    [order_id]="order_id"></app-statuses>
 </div>
 
 

@@ -3,21 +3,31 @@
 # Wersja 0.2 - plany
 
 - Dodanie strony głównej
+
 - Dodanie paginacji na przedmioty
 - Dodanie wyszukiwarki na podstawie tagów
-- Dodanie walidacji lub wyświetlania błędów na wielu aspektach strony
-- Ograniczenie możliwości składania recenzji na przedmiot tylko jak się go kupiło i potwierdziło otrzymanie
-- Zaimplementowanie aktualizacji statusu zamówienia
-- Modyfikacja formularza w profilu oraz w sklepie
+
 - Dodanie różnych errorów w celu powiadomienia klienta o problemach
-- Dodanie strzałki powrotu do wielu stron
-- Zmiana wszystkich linków do obrazków na obrazki
+- Dodanie walidacji lub wyświetlania błędów na wielu aspektach strony
+
+- Ograniczenie możliwości składania recenzji na przedmiot tylko jak się go kupiło i potwierdziło otrzymanie
+
+- Modyfikacja formularza w profilu oraz w sklepie by zwiekszały się wraz z powiększeniem strony
+- Ujednolicenie szerokości wielu wrapperów
+- Dodanie imienia i nazwiska do formularza w danych użytkownika wraz z walidacja
+
+- Zaimplementowanie aktualizacji statusu zamówienia
 - Dodanie tablicy pokazującej aktualny status zamówienia w komponencie detali zamówienia
+
+# Wersja 0.1.5 - 30.07.2024
+
+- Dodano przycisk porwrotu w celu ułatwienia korzystania z aplikacji
+- Wstępna implementacja odbierania statusów
 
 # Wersja 0.1 - 30.07.2024 
 
 - Dodanie możliwości składania zamówień oraz zapisu ich w bazie danych
-- Pełne zaimplementowanie zamówień (check)
+- Pełne zaimplementowanie zamówień 
 - Pełna implementacja możliwości ponownego wykorzystywania komponentu przedmiotu 
 - Dodanie by przesyłanu obrazek w zamówieniu
 - Dodanie karuzeli do zamówień by widzieć zakupione przedmioty

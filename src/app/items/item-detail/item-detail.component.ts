@@ -8,6 +8,7 @@ import {Subscription} from "rxjs";
 import {FormsModule} from "@angular/forms";
 import {ReviewSectionComponent} from "../review-section/review-section.component";
 import {ItemComponent} from "../item-list/item/item.component";
+import {ReturnButtonComponent} from "../../return-button/return-button.component";
 
 @Component({
   selector: 'app-item-detail',
@@ -21,7 +22,8 @@ import {ItemComponent} from "../item-list/item/item.component";
     FormsModule,
     DatePipe,
     ReviewSectionComponent,
-    ItemComponent
+    ItemComponent,
+    ReturnButtonComponent
   ],
   templateUrl: './item-detail.component.html',
   styleUrl: './item-detail.component.scss'

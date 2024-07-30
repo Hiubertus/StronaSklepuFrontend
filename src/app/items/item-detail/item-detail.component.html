@@ -1,20 +1,24 @@
-<app-item
-  [item]="item"
-  [itemQuantity]="null"
-  [showQuantity]="false"
-  [showBorder]="true"
-  [showRating]="true"
-  [showButtonFavorite]="true"
-  [showButtonCart]="true"
-  [showDescription]="true"
-  [clickable]="false"
-  [itemNameLength]="'full'"
-  [columnAmount]="'two'"
-  [imageSize]="'big'"
-  [itemSize]="'big'"
-  [buttonPlacment]="'bottom'"
-  [whichButtonFirst]="'fav'"
-></app-item>
+<div class="position__relative">
+  <app-return-button></app-return-button>
+  <p class="title">Przedmiot</p>
+  <app-item
+    [item]="item"
+    [itemQuantity]="null"
+    [showQuantity]="false"
+    [showBorder]="true"
+    [showRating]="true"
+    [showButtonFavorite]="true"
+    [showButtonCart]="true"
+    [showDescription]="true"
+    [clickable]="false"
+    [itemNameLength]="'full'"
+    [columnAmount]="'two'"
+    [imageSize]="'big'"
+    [itemSize]="'big'"
+    [buttonPlacment]="'bottom'"
+    [whichButtonFirst]="'fav'"
+  ></app-item>
+</div>
 
 <div class="wrapper" *ngIf="item">
   <p class="title">Opinie:</p>

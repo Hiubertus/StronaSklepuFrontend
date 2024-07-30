@@ -8,6 +8,8 @@ import {ItemComponent} from "../../../../../items/item-list/item/item.component"
 import {CarouselComponent} from "./carousel/carousel.component";
 import {MatIcon} from "@angular/material/icon";
 import {OrderComponent} from "../order.component";
+import {ReturnButtonComponent} from "../../../../../return-button/return-button.component";
+import {StatusesComponent} from "./statuses/statuses.component";
 
 @Component({
   selector: 'app-order-detail',
@@ -20,7 +22,9 @@ import {OrderComponent} from "../order.component";
     CarouselComponent,
     DatePipe,
     MatIcon,
-    OrderComponent
+    OrderComponent,
+    ReturnButtonComponent,
+    StatusesComponent
   ],
   templateUrl: './order-detail.component.html',
   styleUrl: './order-detail.component.scss'
