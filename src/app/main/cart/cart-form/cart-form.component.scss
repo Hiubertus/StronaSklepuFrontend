@@ -1,0 +1,14 @@
+.radio__wrap {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 30px;
+}
+.radio__wrapper {
+  display: flex;
+  flex-direction: row;
+  align-self: center;
+  justify-self: center;
+  color: var(--White);
+  margin-bottom: 20px;
+}

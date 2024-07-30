@@ -1,15 +1,27 @@
 # Strona Sklepu Frontend
 
-# Wersja 0.1 - plany
+# Wersja 0.2 - plany
 
 - Dodanie strony głównej
 - Dodanie paginacji na przedmioty
 - Dodanie wyszukiwarki na podstawie tagów
 - Dodanie walidacji lub wyświetlania błędów na wielu aspektach strony
-- Dodanie możliwości składania zamówień oraz zapisu ich w bazie danych
-- Ograniczenie możliwości składania recenzji na przedmiot tylko jak się go kupiło
-- Pełne zaimplementowanie zamówień
+- Ograniczenie możliwości składania recenzji na przedmiot tylko jak się go kupiło i potwierdziło otrzymanie
+- Zaimplementowanie aktualizacji statusu zamówienia
 - Modyfikacja formularza w profilu oraz w sklepie
+- Dodanie różnych errorów w celu powiadomienia klienta o problemach
+- Dodanie strzałki powrotu do wielu stron
+- Zmiana wszystkich linków do obrazków na obrazki
+- Dodanie tablicy pokazującej aktualny status zamówienia w komponencie detali zamówienia
+
+# Wersja 0.1 - 30.07.2024 
+
+- Dodanie możliwości składania zamówień oraz zapisu ich w bazie danych
+- Pełne zaimplementowanie zamówień (check)
+- Pełna implementacja możliwości ponownego wykorzystywania komponentu przedmiotu 
+- Dodanie by przesyłanu obrazek w zamówieniu
+- Dodanie karuzeli do zamówień by widzieć zakupione przedmioty
+- Ponowne wykorzystanie
 
 # Wersja 0.0.5 - 23.07.2024
 

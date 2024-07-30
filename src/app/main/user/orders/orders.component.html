@@ -1,10 +1,14 @@
 <div class="wrapper">
   <p class="title">Zamówienia</p>
-  <div class="wrap" *ngIf="orders.length > 0">
-    <app-order
-      *ngFor="let order of orders"
-      [order]="order"
+  <p class="title__small" *ngIf="orders.length == 0">Nie ma złożonych zamówień</p>
+  <div class="orders__wrapper" *ngIf="orders.length > 0">
+    <app-order class="wrap"
+               *ngFor="let order of orders"
+               [order]="order"
+               [clickable]="true"
+               [showBorder]="true"
+               [useMargin]="true"
+               [dataLength]="'short'"
     ></app-order>
   </div>
-  <p class="title__small" *ngIf="orders.length == 0">Nie ma złożonych zamówień</p>
 </div>

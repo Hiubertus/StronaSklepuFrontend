@@ -1,13 +1,30 @@
-<div class="order__wrapper" (click)="redirectToOrder(order.order_id)">
-  <p> <mat-icon>tag</mat-icon> {{order.order_id}} </p>
-  <p> <mat-icon>sell</mat-icon> {{order.cost}}  zł</p>
-  <p> <mat-icon>credit_card</mat-icon> {{order.payment}}</p>
-  <p> <mat-icon>calendar_month</mat-icon> {{order.date | date:'dd-MM-yyyy'}}</p>
-  <div class="address__wrapper">
-    <p><mat-icon>pin_drop</mat-icon></p>
-    <div>
-      <p>{{order.city}}</p>
-      <p>{{ order.street }}{{ order.apartment ? '/' + order.apartment : '' }}</p>
+<div class="order__wrapper"
+     [ngClass]="[clickable ? 'clickable' : '',
+     showBorder ? 'order__border' : '',
+     useMargin ? 'margin__sides' : '']"
+     (click)="redirectToOrder(order.order_id)">
+  <div class="section__wrapper">
+    <p> <mat-icon>tag</mat-icon> {{order.order_id}} </p>
+    <p> <mat-icon>calendar_month</mat-icon> {{order.date | date:'dd-MM-yyyy'}}</p>
+    <div class="address__wrapper">
+      <p><mat-icon>person</mat-icon></p>
+      <div>
+        <p>{{ dataLength=='short' ? ((order.name).length > 10 ? (order.name | slice:0:10) + '...' : order.name) : order.name}}</p>
+        <p>{{ dataLength=='short' ? ((order.surname).length > 10 ? (order.surname | slice:0:10) + '...' : order.surname) : order.surname}}</p>
+      </div>
+    </div>
+  </div>
+  <div class="section__wrapper">
+    <p> <mat-icon>credit_card</mat-icon> {{order.payment}}</p>
+    <p> <mat-icon>sell</mat-icon> {{order.cost}} zł</p>
+    <div class="address__wrapper">
+      <p><mat-icon>pin_drop</mat-icon></p>
+      <div>
+        <p>{{ dataLength=='short' ? ((order.city).length > 10 ? (order.city | slice:0:10) + '...' : order.city) : order.city}}</p>
+        <p>{{dataLength=='short' ? ((order.street+" "+order.apartment).length > 10 ?
+            (order.street+" "+(order.apartment ? '/' + order.apartment : '') | slice:0:10) + '...' : order.street+(order.apartment ? '/' + order.apartment : '')) :
+          order.street+(order.apartment ? '/' + order.apartment : '')}}</p>
+      </div>
     </div>
   </div>
 </div>

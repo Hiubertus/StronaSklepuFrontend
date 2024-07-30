@@ -4,13 +4,14 @@
     background-color: var(--Grey);
   }
 }
-
+.item__border {
+  border: 5px solid var(--White);
+  border-radius: 20px;
+}
 .item {
   position: relative;
-  border: 5px solid var(--White);
   background-color: var(--Black);
   color: var(--White);
-  border-radius: 20px;
   margin: 0 20px 20px 20px;
   transition: 0.2s;
 }
@@ -66,7 +67,7 @@
 }
 .item__information {
   display: flex;
-  width:240px;
+  width:clamp(150px, 100%, 240px);
   flex-direction: column;
   align-self: center;
   gap:10px;

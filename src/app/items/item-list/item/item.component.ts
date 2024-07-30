@@ -29,8 +29,10 @@ export class ItemComponent implements OnInit{
   @Input() showButtonFavorite!: boolean
   @Input() showButtonCart!: boolean
   @Input() showDescription!: boolean
+  @Input() showBorder!: boolean
   @Input() clickable!: boolean
 
+  @Input() itemNameLength!: 'short' | 'medium' | 'big'| 'full'
   @Input() showQuantity!: 'input' | 'number' | false
   @Input() whichButtonFirst!: 'cart' | 'fav'
   @Input() itemSize!: 'small' | 'medium' | 'big'

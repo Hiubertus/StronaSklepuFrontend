@@ -1,9 +1,22 @@
-.item__image {
-  width: 300px;
-  height: 300px;
-  margin: 20px 0 0 0;
-  align-self: center;
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
+.wrapper {
+  display: flex;
+  width: clamp(320px, 90vw, 650px);
+  margin: 0 20px;
+  padding: 20px 0 10px 0;
+  gap: 10px;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  border: 3px solid var(--White);
+  border-radius: 20px;
+  color: var(--White);
+}
+.section__wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap:10px
+}
+.placeholder {
+  width: 1px;
 }

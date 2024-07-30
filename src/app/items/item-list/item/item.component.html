@@ -1,7 +1,8 @@
 <div class="item"
      [ngClass]="[
   itemSize=='small' ? 'item__small' : itemSize=='medium' ? 'item__medium' : 'item__big',
-  clickable ? 'clickable' : '']"
+  clickable ? 'clickable' : '',
+  showBorder ? 'item__border' : '']"
      *ngIf="item">
 
   <div *ngIf="buttonPlacment=='side'">
@@ -34,7 +35,11 @@
     </div>
     <div class="item__information">
 
-      <p class="overflow__stopper">{{ (item.name).length > 40 ? (item.name | slice:0:40) + '...' : item.name }}</p>
+      <p class="overflow__stopper">{{itemNameLength=='short' ? ((item.name).length > 20 ? (item.name | slice:0:20) + '...' : item.name) :
+        itemNameLength=='medium' ? ((item.name).length > 30 ? (item.name | slice:0:30) + '...' : item.name) :
+          itemNameLength=='big' ? ((item.name).length > 40 ? (item.name | slice:0:40) + '...' : item.name) :
+            item.name
+        }}</p>
       <div *ngIf="showRating" class="item__rating">
         <p>{{item.rating}}</p>
         <ng-container *ngFor="let star of [1, 2, 3, 4, 5]">

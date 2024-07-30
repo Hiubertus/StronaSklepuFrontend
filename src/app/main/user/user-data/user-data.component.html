@@ -39,7 +39,7 @@
 
     <p class="title">Zmiana Hasła</p>
     <div class="input__wrapper">
-      <p>stare hasło:</p>
+      <p>Stare hasło:</p>
         <input type="password" class="form__input" formControlName="oldPassword">
         <div class="error__popup">
           <p *ngIf="errors.includes('badPassword') && !myForm2.get('oldPassword')?.hasError('required') && submitted">Błędne hasło</p>
@@ -48,7 +48,7 @@
     </div>
 
     <div class="input__wrapper">
-      <p>nowe hasło:</p>
+      <p>Nowe hasło:</p>
         <input type="password" class="form__input" formControlName="newPassword">
         <div class="error__popup">
           <p *ngIf="myForm2.get('newPassword')?.hasError('invalidPassword') && !myForm2.get('newPassword')?.hasError('required') && submitted">Błędne hasło</p>
@@ -57,7 +57,7 @@
     </div>
 
     <div class="input__wrapper">
-      <p>powtórz nowe hasło:</p>
+      <p>Powtórz nowe hasło:</p>
         <input type="password" class="form__input" formControlName="repeatNewPassword">
         <div class="error__popup">
           <p *ngIf="myForm2.get('newPassword')?.hasError('passwordMismatch') && !myForm2.get('repeatNewPassword')?.hasError('required') && submitted">Hasła nie są identyczne</p>

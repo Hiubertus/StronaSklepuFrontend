@@ -1,0 +1,105 @@
+<form class="form__wrapper" [formGroup]="addressForm">
+
+  <div class="input__wrapper">
+    <p>Imię:</p>
+    <input type="text" class="form__input" formControlName="name" >
+    <div class="error__popup">
+      <p *ngIf="addressForm.get('name')?.hasError('required') && submitted">Puste Pole</p>
+      <p *ngIf="addressForm.get('name')?.hasError('maxlength') && submitted">Za długie</p>
+      <p *ngIf="addressForm.get('name')?.hasError('minlength') && submitted">Za krótkie</p>
+      <p *ngIf="addressForm.get('name')?.hasError('pattern')
+        && !addressForm.get('name')?.hasError('minlength')
+        && !addressForm.get('name')?.hasError('maxlength')
+        && !addressForm.get('name')?.hasError('required')
+        && submitted">Tylko litery</p>
+    </div>
+  </div>
+
+  <div class="input__wrapper">
+    <p>Nazwisko:</p>
+    <input type="text" class="form__input" formControlName="surname" >
+    <div class="error__popup">
+      <p *ngIf="addressForm.get('surname')?.hasError('required') && submitted">Puste Pole</p>
+      <p *ngIf="addressForm.get('surname')?.hasError('maxlength') && submitted">Za długie</p>
+      <p *ngIf="addressForm.get('surname')?.hasError('minlength') && submitted">Za krótkie</p>
+      <p *ngIf="addressForm.get('surname')?.hasError('pattern')
+        && !addressForm.get('surname')?.hasError('minlength')
+        && !addressForm.get('surname')?.hasError('maxlength')
+        && !addressForm.get('surname')?.hasError('required')
+        && submitted">Tylko litery</p>
+    </div>
+  </div>
+
+  <div class="input__wrapper">
+    <p>Miasto:</p>
+    <input type="text" class="form__input" formControlName="city" >
+    <div class="error__popup">
+      <p *ngIf="addressForm.get('city')?.hasError('required') && submitted">Puste Pole</p>
+    </div>
+  </div>
+
+  <div class="input__wrapper">
+    <p>Ulica:</p>
+    <input type="text" class="form__input" formControlName="street" >
+    <div class="error__popup">
+      <p *ngIf="addressForm.get('street')?.hasError('required') && submitted">Puste Pole</p>
+    </div>
+  </div>
+
+  <div class="input__wrapper">
+    <p>Nr mieszkania (opcjonalne):</p>
+    <input type="text" class="form__input" formControlName="apartment" >
+  </div>
+</form>
+
+
+<div class="radio__wrap">
+  <div class="radio__wrapper">
+    <input type="radio" name="paymentMethod" value="card" [(ngModel)]="selectedPaymentMethod"><p class="radio__text">Karta</p>
+  </div>
+  <div class="radio__wrapper">
+    <input type="radio" name="paymentMethod" value="blik" [(ngModel)]="selectedPaymentMethod"><p class="radio__text">Blik</p>
+  </div>
+</div>
+
+<form class="form__wrapper" [formGroup]="cardForm" *ngIf="selectedPaymentMethod == 'card'">
+  <div class="input__wrapper">
+    <p>Podaj Numer Karty</p>
+    <input class="form__input" type="text" formControlName="cardNumber" placeholder="111122223333">
+    <div class="error__popup">
+      <p *ngIf="cardForm.get('cardNumber')?.hasError('pattern') && !cardForm.get('cardNumber')?.hasError('required') && submitted">Błędna Karta</p>
+      <p *ngIf="cardForm.get('cardNumber')?.hasError('required') && submitted">Puste Pole</p>
+    </div>
+  </div>
+  <div class="input__wrapper">
+    <p>Data ważności</p>
+    <input class="form__input" type="text" formControlName="expirationDate" placeholder="10/23">
+    <div class="error__popup">
+      <p *ngIf="cardForm.get('expirationDate')?.hasError('pattern') && !cardForm.get('expirationDate')?.hasError('required') && submitted">Błędna data</p>
+      <p *ngIf="cardForm.get('expirationDate')?.hasError('required') && submitted">Puste Pole</p>
+    </div>
+  </div>
+  <div class="input__wrapper">
+    <p>CCV</p>
+    <input class="form__input" type="text" formControlName="ccv" placeholder="123">
+    <div class="error__popup">
+      <p *ngIf="cardForm.get('ccv')?.hasError('pattern') && !cardForm.get('ccv')?.hasError('required') && submitted">Błędne CCV</p>
+      <p *ngIf="cardForm.get('ccv')?.hasError('required') && submitted">Puste Pole</p>
+    </div>
+  </div>
+</form>
+<form class="form__wrapper" [formGroup]="blikForm" *ngIf="selectedPaymentMethod == 'blik'">
+  <div class="input__wrapper">
+    <p>Podaj kod blik</p>
+    <input class="form__input" type="text" formControlName="blikCode" placeholder="123456">
+    <div  class="error__popup">
+      <p *ngIf="blikForm.get('blikCode')?.hasError('pattern') && !cardForm.get('blikCode')?.hasError('required')">Błędny Blik</p>
+      <p *ngIf="blikForm.get('blikCode')?.hasError('required') && submitted">Puste Pole</p>
+    </div>
+  </div>
+</form>
+<button class="submit__button" (click)="onSubmit()"> Kup Produkty</button>
+<div>
+  <p class="title">Cena całkowita: </p>
+  <p class="title">{{ totalCost }} zł</p>
+</div>

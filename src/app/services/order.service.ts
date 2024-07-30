@@ -12,32 +12,33 @@ import {Item} from "../models/item.model";
 })
 export class OrderService implements OnInit{
   apiUrl = environment.apiUrl
-  order1!: Order;
-  order2!: Order;
-  orders: Order[] = [this.order1 = {
-    order_id: 1,
-    items: this.itemService.getItems(),
-    items_quantity: [1],
-    cost: 59.98,
-    apartment: '',
-    street: 'Kurska 5',
-    city: 'Lublin',
-    payment: 'Karta',
-    date: '2024-07-07',
-    status: 'W toku'
-  },
-  this.order2 = {
-    order_id: 2,
-    items: this.itemService.getItems(),
-    items_quantity: [1],
-    cost: 59.98,
-    apartment: '32',
-    street: 'Sezamkowa 69',
-    city: 'Warszawa',
-    payment: 'Blik',
-    date: '2024-07-10',
-    status: 'Wysłane'
-  }]
+  // order1!: Order;
+  // order2!: Order;
+  orders: Order[] = [];
+  // orders: Order[] = [this.order1 = {
+  //   order_id: 1,
+  //   items: this.itemService.getItems(),
+  //   items_quantity: [1],
+  //   cost: 59.98,
+  //   apartment: '',
+  //   street: 'Kurska 5',
+  //   city: 'Lublin',
+  //   payment: 'Karta',
+  //   date: '2024-07-07',
+  //   status: 'W toku'
+  // },
+  // this.order2 = {
+  //   order_id: 2,
+  //   items: this.itemService.getItems(),
+  //   items_quantity: [1],
+  //   cost: 59.98,
+  //   apartment: '32',
+  //   street: 'Sezamkowa 69',
+  //   city: 'Warszawa',
+  //   payment: 'Blik',
+  //   date: '2024-07-10',
+  //   status: 'Wysłane'
+  // }]
 
   ordersChange = new Subject<Order[]>()
   constructor(private http: HttpClient,private authService: AuthService, private itemService: ItemService) { }
@@ -68,15 +69,14 @@ export class OrderService implements OnInit{
     })
   }
   async postOrder(items: {item: Item, quantity: number}[], name: string, surname: string, city: string ,street: string, apartment: string, payment: string, cost: number) {
-    const date = new Date()
-    const order = {items, date , name, surname, city, street, apartment, payment, cost}
+    const order = {items, name, surname, city, street, apartment, payment, cost}
     this.http.post<any>(`${this.apiUrl}/Order`, order, {
       headers: {Authorization: `Bearer ${this.authService.getToken()}`}
     }).subscribe( {
       next: data =>{
       },
       error: err =>{
-
+        console.error(err)
       }
     })
   }
@@ -84,7 +84,6 @@ export class OrderService implements OnInit{
     return this.orders.slice()
   }
   getOrder(order_id: number) {
-    console.log(this.orders[1].items)
     return this.orders.find(order => order.order_id == order_id)!;
   }
 }

@@ -8,6 +8,7 @@ import {FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators} fr
 import {AuthService} from "../../services/auth.service";
 import {User} from "../../models/user.model";
 import {OrderService} from "../../services/order.service";
+import {CartFormComponent} from "./cart-form/cart-form.component";
 
 @Component({
   selector: 'app-cart',
@@ -17,7 +18,8 @@ import {OrderService} from "../../services/order.service";
     NgForOf,
     NgIf,
     ReactiveFormsModule,
-    FormsModule
+    FormsModule,
+    CartFormComponent
   ],
   templateUrl: './cart.component.html',
   styleUrl: './cart.component.scss'
@@ -31,16 +33,7 @@ export class CartComponent implements OnInit, OnDestroy {
   loginStatusSubscription!: Subscription
 
   totalCost: number = 0;
-  selectedPaymentMethod: 'card' | 'blik' = 'card';
-
-  cardForm!: FormGroup;
-  blikForm!: FormGroup;
-  addressForm!: FormGroup;
-
-  errors: string[] = [];
-  submitted: boolean = false;
-
-  constructor(private itemService: ItemService, private authService: AuthService, private orderService: OrderService) {}
+  constructor(private itemService: ItemService, private authService: AuthService) {}
 
   async ngOnInit() {
     this.items = this.itemService.getCart()
@@ -58,44 +51,6 @@ export class CartComponent implements OnInit, OnDestroy {
       this.loginStatus = loginStatusData;
       this.user = this.authService.getUser()
     })
-
-    this.addressForm = new FormGroup({
-      name: new FormControl(null,[
-        Validators.required,
-        Validators.minLength(2),
-        Validators.maxLength(35),
-        Validators.pattern(/^[a-zA-Z]{2,}([- ][a-zA-Z]{2,})*$/)]),
-      surname: new FormControl(null,[
-        Validators.required,
-        Validators.minLength(2),
-        Validators.maxLength(35),
-        Validators.pattern(/^[a-zA-Z]{2,}([- ][a-zA-Z]{2,})*$/)]),
-      street: new FormControl(this.user?.street,Validators.required),
-      city: new FormControl(this.user?.city,Validators.required),
-      apartment: new FormControl(this.user?.apartment)
-    })
-
-    this.blikForm = new FormGroup({
-      blikCode: new FormControl('', [
-        Validators.required,
-        Validators.pattern('^[0-9]{6}$')
-      ])
-    });
-
-    this.cardForm = new FormGroup({
-      cardNumber: new FormControl('', [
-        Validators.required,
-        Validators.pattern('^[0-9]{12}$')
-      ]),
-      expirationDate: new FormControl('', [
-        Validators.required,
-        Validators.pattern('^(0[1-9]|1[0-2])\\/\\d{2}$')
-      ]),
-      ccv: new FormControl('', [
-        Validators.required,
-        Validators.pattern('^[0-9]{3}$')
-      ])
-    });
   }
 
   ngOnDestroy() {
@@ -108,27 +63,5 @@ export class CartComponent implements OnInit, OnDestroy {
 
   calculateTotalCost() {
     this.totalCost = this.items.reduce((sum, item) => sum + Number(item.item.cost * item.quantity), 0);
-  }
-
-  async onSubmit() {
-    this.submitted = true
-    this.errors = [];
-    if(this.addressForm.valid) {
-      if((this.selectedPaymentMethod == 'blik' && this.blikForm.valid) || (this.selectedPaymentMethod == 'card' && this.cardForm.valid)) {
-        try {
-          await this.orderService.postOrder(
-            this.items,
-            this.addressForm.value.name,
-            this.addressForm.value.surname,
-            this.addressForm.value.city,
-            this.addressForm.value.street,
-            this.addressForm.value.apartment,
-            this.selectedPaymentMethod,
-            this.totalCost)
-        } catch(err: any) {
-
-        }
-      }
-    }
   }
 }
