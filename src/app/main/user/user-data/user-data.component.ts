@@ -1,9 +1,11 @@
 import {Component, OnInit} from '@angular/core';
 import {AbstractControl, FormControl, FormGroup, ReactiveFormsModule, ValidatorFn, Validators} from "@angular/forms";
-import {User} from "../../../models/user.model";
+import {User} from "../../../shared/models/user.model";
 import {CommonModule} from "@angular/common";
-import {AuthService} from "../../../services/auth.service";
+import {AuthService} from "../../../shared/services/auth.service";
 import {ReturnButtonComponent} from "../../../return-button/return-button.component";
+import {InputWrapperComponent} from "../../../shared/components/input-wrapper/input-wrapper.component";
+import {passwordMatchValidator, passwordValidator} from "../../../shared/validators.model";
 
 @Component({
   selector: 'app-user-data',
@@ -11,115 +13,121 @@ import {ReturnButtonComponent} from "../../../return-button/return-button.compon
   imports: [
     ReactiveFormsModule,
     CommonModule,
-    ReturnButtonComponent
+    ReturnButtonComponent,
+    InputWrapperComponent
   ],
   templateUrl: './user-data.component.html',
   styleUrl: './user-data.component.scss'
 })
 export class UserDataComponent implements OnInit {
 
-  myForm1!: FormGroup;
-  myForm2!: FormGroup;
+  userForm!: FormGroup;
+  passwordForm!: FormGroup;
 
   user!: User | null;
-  check: boolean = false
   errors: string[] = [];
-  submitted: boolean = false;
-  submitted2: boolean = false;
+  passwordSubmitted: boolean = false;
+  userSubmitted: boolean = false;
 
   constructor(private authService: AuthService) {
   }
 
   async ngOnInit() {
-    this.myForm1 = new FormGroup({
-      street: new FormControl(''),
-      apartment: new FormControl(''),
-      city: new FormControl('')
+    this.user = this.authService.getUser()
+
+    this.userForm = new FormGroup({
+      username: new FormControl({value: this.user?.username, disabled: true}),
+      email: new FormControl({value: this.user?.email, disabled: true}),
+      street: new FormControl(this.user?.street),
+      apartment: new FormControl(this.user?.apartment),
+      city: new FormControl(this.user?.city),
     });
 
-    this.myForm2 = new FormGroup({
+    this.passwordForm = new FormGroup({
       oldPassword: new FormControl('', [Validators.required]),
       newPassword: new FormControl('',
         [
           Validators.required,
           Validators.minLength(9),
-          this.passwordValidator(),
+          passwordValidator(),
         ]),
       repeatNewPassword: new FormControl('',
         [
           Validators.required,
-          this.passwordMatchValidator()
+          passwordMatchValidator()
         ])
-    });
-
-    this.user = this.authService.getUser()
-    this.myForm1.patchValue({
-      street: this.user!.street,
-      apartment: this.user!.apartment,
-      city: this.user!.city
     });
   }
 
   async savePassword() {
-    this.errors = [];
-    this.submitted = true;
+    this.passwordSubmitted = true;
 
-    if (this.myForm2.valid) {
+    if (this.passwordForm.valid) {
       try {
-        const result = await this.authService.patchUserPassword(this.myForm2.value.oldPassword, this.myForm2.value.newPassword);
+        const result = await this.authService.patchUserPassword(this.passwordForm.value.oldPassword, this.passwordForm.value.newPassword);
         if (result) {
-          this.myForm2.reset();
-          this.myForm2.disable()
-          this.submitted = false;
-          this.errors.push('passwordUpdated');
+          this.passwordForm.reset();
+          this.passwordForm.disable()
+          this.passwordSubmitted = false;
+          this.passwordForm.get('repeatNewPassword')?.setErrors({ success: true });
         }
       } catch (err: any) {
         if (err.message === 'badPassword') {
-          this.errors.push('badPassword');
+          this.passwordForm.get('newPassword')?.setErrors({ badPassword: true });
         }
         if (err.message === 'databaseError') {
-          this.errors.push('databaseError');
+          this.passwordForm.get('repeatNewPassword')?.setErrors({ databaseError: true });
         }
-        console.error('An error occurred:', err);
       }
     }
   }
 
   async saveGeneralData() {
-    this.submitted2 = true
-    this.check = true
+    this.userSubmitted = true
     try {
-      const result = await this.authService.patchUserData(this.myForm1.value.street, this.myForm1.value.apartment, this.myForm1.value.city);
-      console.log(this.myForm1.value.street, this.myForm1.value.apartment, this.myForm1.value.city)
+      const result = await this.authService.patchUserData(this.userForm.value.street, this.userForm.value.apartment, this.userForm.value.city);
       if (result) {
-        this.submitted2 = false
-        this.check = true;
-        this.myForm1.disable()
+        this.userSubmitted = false
+        this.userForm.disable()
+        this.userForm.get('apartment')?.setErrors({ success : true })
       }
     } catch (err: any) {
-      this.check = false
-      console.error('An error occurred:', err);
+      if (err.message === 'databaseError') {
+        this.userForm.get('apartment')?.setErrors({ databaseError : true })
+      }
     }
 
   }
 
-  passwordValidator(): ValidatorFn {
-    return (control: AbstractControl): { [key: string]: boolean } | null => {
-      const value: string = control.value;
-      const hasUpperCase = /[A-Z]/.test(value);
-      const hasLowerCase = /[a-z]/.test(value);
-      const hasNumber = /\d/.test(value);
-      const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(value);
-      const isValid = hasUpperCase && hasLowerCase && hasNumber && hasSpecialChar;
-      return isValid ? null : {'invalidPassword': true};
-    };
+  get usernameInput(): FormControl {
+    return this.userForm.get('username') as FormControl;
+  }
+  get emailInput(): FormControl {
+    return this.userForm.get('email') as FormControl;
+  }
+  get nameInput(): FormControl {
+    return this.userForm.get('name') as FormControl;
+  }
+  get surnameInput(): FormControl {
+    return this.userForm.get('surname') as FormControl;
+  }
+  get cityInput(): FormControl {
+    return this.userForm.get('city') as FormControl;
+  }
+  get streetInput(): FormControl {
+    return this.userForm.get('street') as FormControl;
+  }
+  get apartmentInput(): FormControl {
+    return this.userForm.get('apartment') as FormControl;
   }
 
-  passwordMatchValidator(): ValidatorFn {
-    return (control: AbstractControl): { [key: string]: boolean } | null => {
-      const password = control.parent?.get('newPassword')?.value;
-      const confirmPassword = control.value;
-      return password === confirmPassword ? null : {'passwordMismatch': true};
-    };
+  get oldPasswordInput(): FormControl {
+    return this.passwordForm.get('oldPassword') as FormControl;
+  }
+  get newPasswordInput(): FormControl {
+    return this.passwordForm.get('newPassword') as FormControl;
+  }
+  get repeatNewPasswordInput(): FormControl {
+    return this.passwordForm.get('repeatNewPassword') as FormControl;
   }
 }

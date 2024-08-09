@@ -1,15 +1,21 @@
 <div class="wrapper">
   <app-return-button></app-return-button>
   <p class="title">Zamówienia</p>
-  <p class="title__small" *ngIf="orders.length == 0">Nie ma złożonych zamówień</p>
-  <div class="orders__wrapper" *ngIf="orders.length > 0">
-    <app-order class="wrap"
-               *ngFor="let order of orders"
-               [order]="order"
-               [clickable]="true"
-               [showBorder]="true"
-               [useMargin]="true"
-               [dataLength]="'short'"
-    ></app-order>
-  </div>
+  @if(orders.length == 0 && !error) {
+    <p class="title__small">Nie ma złożonych zamówień</p>
+  } @else if (error) {
+    <p class="title__small">Pobranie zamówień z bazy danych nie powdiodło się</p>
+  } @else if (orders.length > 0 && !error) {
+    <div class="orders__wrapper">
+      @for (order of orders; track order.order_id) {
+        <app-order class="wrap"
+                   [order]="order"
+                   [clickable]="true"
+                   [showBorder]="true"
+                   [useMargin]="true"
+                   [dataLength]="'short'"
+        ></app-order>
+      }
+    </div>
+  }
 </div>

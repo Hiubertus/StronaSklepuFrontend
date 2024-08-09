@@ -1,100 +1,66 @@
 <p class="title">
-  <span *ngIf="authMode=='login'">Logowanie</span>
-  <span *ngIf="authMode=='register'">Rejestracja</span>
+  @if (authMode == 'login') {
+    <span>Logowanie</span>
+  } @else if (authMode == 'register') {
+    <span>Rejestracja</span>
+  }
 </p>
 
 <form class="form__wrapper" [formGroup]="authMode=='login' ? loginForm : registerForm" (submit)="onSubmit()">
-
-  <div *ngIf="authMode=='login'" class="form__wrapper">
-    <div class="input__wrapper">
-      <p>Email</p>
-
-      <input class="form__input" type="text" formControlName="email" >
-      <div class="error__popup">
-        <p *ngIf="loginForm.get('email')?.hasError('required') && submitted">Puste Pole</p>
-        <p *ngIf="!loginForm.get('email')?.hasError('required') && errors.includes('emailNonExist') && submitted">Nie
-          ma takiego emaila</p>
-      </div>
-    </div>
-
-    <div class="input__wrapper">
-      <p>Hasło</p>
-      <input class="form__input" type="password" formControlName="password">
-      <div class="error__popup">
-        <p *ngIf="loginForm.get('password')?.hasError('required') && submitted">Puste Pole</p>
-        <p
-          *ngIf="errors.includes('databaseError') && !loginForm.get('password')?.hasError('required') && !errors.includes('badPassword') && submitted">
-          Błąd bazy danych, spróbuj ponownie </p>
-        <p *ngIf="errors.includes('badPassword') && !loginForm.get('password')?.hasError('required') && submitted">
-          Błędne hasło</p>
-        <p *ngIf="errors.includes('accountLogged')" class="successful">Logowanie Powiodło się</p>
-      </div>
-    </div>
+  <div class="form__wrapper">
+    @if (authMode == 'login') {
+      <app-input-wrapper
+        [inputLabel]="'Email'"
+        [inputPlaceholder]="'abcd@gmail.com'"
+        [inputType]="'email'"
+        [submitted]="submitted"
+        [control]="emailLogin">
+      </app-input-wrapper>
+      <app-input-wrapper
+        [inputLabel]="'Hasło'"
+        [inputPlaceholder]="''"
+        [inputType]="'password'"
+        [submitted]="submitted"
+        [control]="passwordLogin">
+      </app-input-wrapper>
+    } @else if (authMode == 'register') {
+      <app-input-wrapper
+        [inputLabel]="'Nazwa użytkownika'"
+        [inputPlaceholder]="'sheinuser22335'"
+        [inputType]="'text'"
+        [submitted]="submitted"
+        [control]="usernameRegister">
+      </app-input-wrapper>
+      <app-input-wrapper
+        [inputLabel]="'Email'"
+        [inputPlaceholder]="'abcd@gmail.com'"
+        [inputType]="'email'"
+        [submitted]="submitted"
+        [control]="emailRegister">
+      </app-input-wrapper>
+      <app-input-wrapper
+        [inputLabel]="'Hasło'"
+        [inputPlaceholder]="''"
+        [inputType]="'password'"
+        [submitted]="submitted"
+        [control]="newPasswordRegister">
+      </app-input-wrapper>
+      <app-input-wrapper
+        [inputLabel]="'Powtórz hasło'"
+        [inputPlaceholder]="''"
+        [inputType]="'password'"
+        [submitted]="submitted"
+        [control]="repeatNewPasswordRegister">
+      </app-input-wrapper>
+    }
   </div>
 
-  <div *ngIf="authMode=='register'" class="form__wrapper">
-
-    <div class="input__wrapper">
-      <p>Nazwa użytkownika</p>
-      <input class="form__input" type="text" formControlName="username" [ngClass]="{ 'input__disabled' : registerForm.get('username')?.disabled}">
-      <div class="error__popup">
-        <p *ngIf="registerForm.get('username')?.hasError('required') && submitted">Puste Pole</p>
-        <p *ngIf="registerForm.get('username')?.hasError('minlength') && submitted">Za krótka nazwa</p>
-        <p *ngIf="registerForm.get('username')?.hasError('maxlength') && submitted">Za długa nazwa</p>
-        <p *ngIf="errors.includes('usernameExist')
-        && !registerForm.get('username')?.hasError('pattern')
-        && !registerForm.get('username')?.hasError('maxlength')
-        && !registerForm.get('username')?.hasError('minlength')
-        && !registerForm.get('username')?.hasError('required')
-        && submitted">Nazwa użytkownika zajęta</p>
-        <p *ngIf="registerForm.get('username')?.hasError('pattern')
-        && !registerForm.get('username')?.hasError('maxlength')
-        && !registerForm.get('username')?.hasError('minlength')
-        && !registerForm.get('username')?.hasError('required')
-        && !errors.includes('usernameExist')
-        && submitted">Nie używaj spacji</p>
-      </div>
-    </div>
-
-    <div class="input__wrapper">
-      <p>Email</p>
-      <input class="form__input" type="text" formControlName="email" [ngClass]="{ 'input__disabled' : registerForm.get('email')?.disabled}">
-      <div class="error__popup">
-        <p *ngIf="registerForm.get('email')?.hasError('required') && submitted">Puste Pole</p>
-        <p *ngIf="errors.includes('emailExist') && submitted">Email Zajęty</p>
-        <p *ngIf="registerForm.get('email')?.hasError('email')
-        && !registerForm.get('email')?.hasError('required')
-        && submitted">Błędny Email</p>
-      </div>
-    </div>
-
-    <div class="input__wrapper">
-      <p>Hasło</p>
-      <input class="form__input" type="password" formControlName="password" [ngClass]="{ 'input__disabled' : registerForm.get('password')?.disabled}">
-      <div class="error__popup">
-        <p *ngIf="registerForm.get('password')?.hasError('required') && submitted">Puste Pole</p>
-        <p *ngIf="registerForm.get('password')?.hasError('pattern')
-        && !registerForm.get('password')?.hasError('required')
-        && submitted">Błędne hasło</p>
-      </div>
-    </div>
-
-    <div class="input__wrapper">
-      <p>Powtórz hasło</p>
-      <input class="form__input" type="password" formControlName="password2" [ngClass]="{ 'input__disabled' : registerForm.get('password2')?.disabled}">
-      <div class="error__popup">
-        <p *ngIf="registerForm.get('password2')?.hasError('required') && submitted">Puste Pole</p>
-        <p *ngIf="registerForm.get('password2')?.hasError('passwordMismatch')
-        && !registerForm.get('password2')?.hasError('required')
-        && submitted">Hasła nie są identyczne</p>
-        <p *ngIf="errors.includes('accountCreated')" class="successful">Konto zostało utworzone</p>
-        <p *ngIf="errors.includes('databaseError')">Błąd bazy danych</p>
-      </div>
-    </div>
-  </div>
   <button class="submit__button">
-    <span *ngIf="authMode=='login'">Zaloguj się</span>
-    <span *ngIf="authMode=='register'">Zarejestruj się</span>
+    @if (authMode == 'login') {
+      <span>Zaloguj się</span>
+    } @else if (authMode == 'register') {
+      <span>Zarejestruj się</span>
+    }
   </button>
 
 </form>
@@ -102,15 +68,21 @@
   <div class="line__wrapper">
     <span class="line"></span>
     <p class="title__small">
-      <span *ngIf="authMode=='login'">Nie masz konta?</span>
-      <span *ngIf="authMode=='register'">Masz konto?</span>
+      @if (authMode == 'login') {
+        <span>Nie masz konta?</span>
+      } @else if (authMode == 'register') {
+        <span>Masz konto?</span>
+      }
     </p>
     <span class="line"></span>
   </div>
 
   <a class="link" (click)="changeAuthPage(authMode)">
-    <span *ngIf="authMode=='register'">Zaloguj się</span>
-    <span *ngIf="authMode=='login'">Zarejestruj się</span>
+    @if (authMode == 'register') {
+      <span>Zaloguj się</span>
+    } @else if (authMode == 'login') {
+      <span>Zarejestruj się</span>
+    }
   </a>
 
 </div>

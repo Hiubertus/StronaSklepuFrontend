@@ -1,92 +1,118 @@
-<div class="item"
-     [ngClass]="[
+@if (item) {
+  <div class="item"
+       [ngClass]="[
   itemSize=='small' ? 'item__small' : itemSize=='medium' ? 'item__medium' : 'item__big',
   clickable ? 'clickable' : '',
-  showBorder ? 'item__border' : '']"
-     *ngIf="item">
-
-  <div *ngIf="buttonPlacment=='side'">
-    <button class="button__small"
-            *ngIf="showButtonCart"
-            (click)="cart($event, item.item_id)"
-            [ngClass]="[
+  showBorder ? 'item__border' : '']">
+    @if (buttonPlacment=='side') {
+      @if (showButtonCart) {
+        <button class="button__small"
+                (click)="cart($event, item.item_id)"
+                [ngClass]="[
           isItemInCart(item.item_id) ? 'active' : '',
           whichButtonFirst=='cart' ? 'button__top' : 'button__bottom'
           ]">
-      <mat-icon>shopping_basket</mat-icon>
-    </button>
-    <button class="button__small"
-            *ngIf="showButtonFavorite"
-            (click)="fav($event, item.item_id)"
-            [ngClass]="[
+          <mat-icon>shopping_basket</mat-icon>
+        </button>
+      }
+      @if (showButtonFavorite) {
+        <button class="button__small"
+                (click)="fav($event, item.item_id)"
+                [ngClass]="[
           isItemInFav(item.item_id) ? 'active'  : '',
           whichButtonFirst=='fav' ? 'button__top' : 'button__bottom'
           ]">
-      <mat-icon>favorite</mat-icon>
-    </button>
-  </div>
-  <div class="item__wrapper"
-       [ngClass]="columnAmount=='one' ? 'item__wrapper__col1' : 'item__wrapper__col2'"
-       (click)="redirectToItem(item.item_id)">
+          <mat-icon>favorite</mat-icon>
+        </button>
+      }
+    }
 
-    <div class="item__image"
-         [ngClass]="imageSize=='small' ? 'item__image__small' : imageSize=='medium' ? 'item__image__medium' : 'item__image__big'"
-         [ngStyle]="{'background-image': item.image ? 'url(' + item.image + ')' : 'none'}">
-    </div>
-    <div class="item__information">
+    <div class="item__wrapper"
+         [ngClass]="columnAmount=='one' ? 'item__wrapper__col1' : 'item__wrapper__col2'"
+         (click)="redirectToItem(item.item_id)">
 
-      <p class="overflow__stopper">{{itemNameLength=='short' ? ((item.name).length > 20 ? (item.name | slice:0:20) + '...' : item.name) :
-        itemNameLength=='medium' ? ((item.name).length > 30 ? (item.name | slice:0:30) + '...' : item.name) :
-          itemNameLength=='big' ? ((item.name).length > 40 ? (item.name | slice:0:40) + '...' : item.name) :
-            item.name
-        }}</p>
-      <div *ngIf="showRating" class="item__rating">
-        <p>{{item.rating}}</p>
-        <ng-container *ngFor="let star of [1, 2, 3, 4, 5]">
-          <mat-icon *ngIf="item.rating >= star" class="star">star</mat-icon>
-          <mat-icon *ngIf="item.rating >= star - 0.5 && item.rating < star" class="star">star_half</mat-icon>
-          <mat-icon *ngIf="item.rating < star - 0.5" class="star">star_outline</mat-icon>
-        </ng-container>
-        <p>na {{item.review_amount}}</p>
+      <div class="item__image"
+           [ngClass]="imageSize=='small' ? 'item__image__small' : imageSize=='medium' ? 'item__image__medium' : 'item__image__big'"
+           [ngStyle]="{'background-image': item.image ? 'url(' + item.image + ')' : 'none'}">
       </div>
 
-      <div class="item__quantity">
-        <p> {{ itemQuantity != null ? item.cost * itemQuantity : item.cost }}zł</p>
-        <form  class="item__quantity__form" *ngIf="itemQuantity != null && showQuantity=='input'" [formGroup]="quantityForm">
-          <input class="quantity__input"
-                 type="text"
-                 formControlName="quantity"
-                 (input)="onQuantityChange()">
-        </form>
-        <p *ngIf="itemQuantity != null && showQuantity=='number'"> {{ itemQuantity }}</p>
-        <p *ngIf="showQuantity == 'number' || showQuantity == 'input'"> Sztuki</p>
-      </div>
-    </div>
+      <div class="item__information">
 
-  </div>
-  <p class="item__description overflow__stopper"
-     *ngIf="showDescription"
-     [ngClass]="buttonPlacment=='side' ? 'item__description__margin' : ''"> {{item.description}}</p>
-  <div class="button__wrapper" *ngIf="buttonPlacment=='bottom'">
-    <button class="button__big"
-            *ngIf="showButtonCart"
-            (click)="cart($event, item.item_id)"
-            [ngClass]="[
+        <p class="overflow__stopper">{{itemNameLength=='short' ? ((item.name).length > 20 ? (item.name | slice:0:20) + '...' : item.name) :
+          itemNameLength=='medium' ? ((item.name).length > 30 ? (item.name | slice:0:30) + '...' : item.name) :
+            itemNameLength=='big' ? ((item.name).length > 40 ? (item.name | slice:0:40) + '...' : item.name) :
+              item.name
+          }}</p>
+
+        @if (showRating) {
+          <div class="item__rating">
+            <p>{{item.rating}}</p>
+            @for (star of [1, 2, 3, 4, 5]; track star) {
+              <ng-container>
+                @if(item.rating >= star) {
+                  <mat-icon class="star">star</mat-icon>
+                } @else if (item.rating >= star - 0.5 && item.rating < star) {
+                  <mat-icon class="star">star_half</mat-icon>
+                } @else if (item.rating < star - 0.5) {
+                  <mat-icon class="star">star_outline</mat-icon>
+                }
+              </ng-container>
+            }
+            <p>na {{item.review_amount}}</p>
+          </div>
+        }
+
+
+        <div class="item__quantity">
+          <p> {{ itemQuantity != null ? item.cost * itemQuantity : item.cost }}zł</p>
+          @if(itemQuantity != null && showQuantity=='input') {
+            <form  class="item__quantity__form" [formGroup]="quantityForm">
+              <input class="quantity__input"
+                     type="text"
+                     formControlName="quantity"
+                     (input)="onQuantityChange()">
+            </form>
+          }
+          @if (itemQuantity != null && showQuantity=='number') {
+            <p> {{ itemQuantity }}</p>
+          }
+          @if(showQuantity == 'number' || showQuantity == 'input') {
+            <p> Sztuki</p>
+          }
+        </div>
+      </div>
+
+    </div>
+    @if(showDescription) {
+      <p class="item__description overflow__stopper"
+         [ngClass]="buttonPlacment=='side' ? 'item__description__margin' : ''"> {{item.description}}</p>
+    }
+    @if (buttonPlacment=='bottom') {
+      <div class="button__wrapper">
+        @if (showButtonCart) {
+          <button class="button__big"
+                  (click)="cart($event, item.item_id)"
+                  [ngClass]="[
             isItemInCart(item.item_id) ? 'active'  : '',
             whichButtonFirst=='cart' ? 'button__first' : 'button__second'
             ]">
-      <p>Dodaj do koszyka</p>
-      <mat-icon>shopping_basket</mat-icon>
-    </button>
-    <button class="button__big"
-            *ngIf="showButtonFavorite"
-            (click)="fav($event, item.item_id)"
-            [ngClass]="[
+            <p>Dodaj do koszyka</p>
+            <mat-icon>shopping_basket</mat-icon>
+          </button>
+        }
+        @if(showButtonFavorite) {
+          <button class="button__big"
+                  (click)="fav($event, item.item_id)"
+                  [ngClass]="[
             isItemInFav(item.item_id) ? 'active'  : '',
             whichButtonFirst=='fav' ? 'button__first' : 'button__second'
             ]">
-      <p>Dodaj do zapisanych</p>
-      <mat-icon>favorite</mat-icon>
-    </button>
+            <p>Dodaj do zapisanych</p>
+            <mat-icon>favorite</mat-icon>
+          </button>
+        }
+      </div>
+    }
   </div>
-</div>
+}
+

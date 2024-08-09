@@ -1,13 +1,13 @@
-import {Component, Input, OnDestroy, OnInit} from '@angular/core';
-import {DatePipe, NgClass, NgForOf, NgIf} from "@angular/common";
+import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
+import {DatePipe, NgClass} from "@angular/common";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {MatIcon} from "@angular/material/icon";
-import {Review} from "../../models/review.model";
+import {Review} from "../../shared/models/review.model";
 import {Subscription} from "rxjs";
-import {User} from "../../models/user.model";
+import {User} from "../../shared/models/user.model";
 import {ActivatedRoute} from "@angular/router";
-import {AuthService} from "../../services/auth.service";
-import {ReviewService} from "../../services/review.service";
+import {AuthService} from "../../shared/services/auth.service";
+import {ReviewService} from "../../shared/services/review.service";
 import {ReviewComponent} from "./review/review.component";
 import {ReviewFormComponent} from "./review-form/review-form.component";
 import {PaginationComponent} from "./pagination/pagination.component";
@@ -19,8 +19,6 @@ import {PaginationComponent} from "./pagination/pagination.component";
     DatePipe,
     FormsModule,
     MatIcon,
-    NgForOf,
-    NgIf,
     ReactiveFormsModule,
     NgClass,
     ReviewComponent,
@@ -51,6 +49,8 @@ export class ReviewSectionComponent implements OnInit, OnDestroy{
   reviewText: string = '';
   rating: number = 0;
 
+  @Output() errorReview = new EventEmitter<void>()
+
   constructor(private route: ActivatedRoute,
               private authService: AuthService,
               private reviewService: ReviewService) {
@@ -66,14 +66,19 @@ export class ReviewSectionComponent implements OnInit, OnDestroy{
     });
 
     await this.reviewService.getReviewsFromDB(this.item_id, this.currentPage, this.filter, this.sort);
-    this.reviewSubscription = this.reviewService.reviewsChanged.subscribe((reviews: Review[]) => {
-      this.reviews = []
-      this.reviews = reviews
-      if(reviews.length > 0) {
-        this.userHasReview = this.reviews[0].user_id == this.user?.user_id
-      }
-      else {
-        this.userHasReview = false;
+    this.reviewSubscription = this.reviewService.reviewsChanged.subscribe({
+      next: (reviews) => {
+          this.reviews = []
+          this.reviews = reviews
+          if(reviews.length > 0) {
+            this.userHasReview = this.reviews[0].user_id == this.user?.user_id
+          }
+          else {
+            this.userHasReview = false;
+          }
+
+      }, error: () => {
+        this.errorReview.emit()
       }
     })
 

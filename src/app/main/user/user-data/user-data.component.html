@@ -1,72 +1,77 @@
 <div class="wrapper">
   <app-return-button></app-return-button>
   <p class="title">Użytkownik</p>
-  <form class="form__wrapper" [formGroup]="myForm1" (ngSubmit)="saveGeneralData()">
+  <form class="form__wrapper" [formGroup]="userForm" (ngSubmit)="saveGeneralData()">
     <p class="title">Dane Ogólne</p>
+    <app-input-wrapper
+    [inputLabel]="'Nazwa użytkownika'"
+    [inputPlaceholder]="''"
+    [inputType]="'text'"
+    [submitted]="userSubmitted"
+    [control]="usernameInput">
+    </app-input-wrapper>
 
-    <div class="input__wrapper ">
-      <p>Nazwa użytkownika:</p>
-      <input type="text" class="form__input input__disabled" [value]="user!.username" disabled>
-    </div>
+    <app-input-wrapper
+      [inputLabel]="'Email'"
+      [inputPlaceholder]="''"
+      [inputType]="'email'"
+      [submitted]="userSubmitted"
+      [control]="emailInput">
+    </app-input-wrapper>
 
-    <div class="input__wrapper">
-      <p>Email:</p>
-      <input type="text" class="form__input input__disabled" [value]="user!.email" disabled>
-    </div>
+    <app-input-wrapper
+    [inputLabel]="'Miasto'"
+    [inputPlaceholder]="'Warszawa'"
+    [inputType]="'text'"
+    [submitted]="userSubmitted"
+    [control]="cityInput">
+    </app-input-wrapper>
 
-    <div class="input__wrapper">
-      <p>Ulica:</p>
-      <input type="text" class="form__input" formControlName="street" [value]="user!.street">
-    </div>
+    <app-input-wrapper
+    [inputLabel]="'Ulica'"
+    [inputPlaceholder]="'Ziemiana 7'"
+    [inputType]="'text'"
+    [submitted]="userSubmitted"
+    [control]="streetInput">
+    </app-input-wrapper>
 
-    <div class="input__wrapper">
-      <p>Miasto:</p>
-      <input type="text" class="form__input" formControlName="city" [value]="user!.city">
-    </div>
-
-    <div class="input__wrapper">
-      <p>Nr mieszkania (opcjonalne):</p>
-      <input type="text" class="form__input" formControlName="apartment" [value]="user!.apartment">
-    </div>
+    <app-input-wrapper
+    [inputLabel]="'Nr mieszkania'"
+    [inputPlaceholder]="'(opcjonalne)'"
+    [inputType]="'text'"
+    [submitted]="userSubmitted"
+    [control]="apartmentInput">
+    </app-input-wrapper>
 
     <button type="submit" class="submit__button">Zapisz</button>
-    <div class="message">
-      <p *ngIf="check" class="message__success">Zmieniono dane</p>
-      <p *ngIf="!check && submitted2" class="message__fail">Coś poszło nie tak</p>
-    </div>
   </form>
 
-  <form class="form__wrapper" [formGroup]="myForm2" (ngSubmit)="savePassword()">
+  <form class="form__wrapper" [formGroup]="passwordForm" (ngSubmit)="savePassword()">
 
     <p class="title">Zmiana Hasła</p>
-    <div class="input__wrapper">
-      <p>Stare hasło:</p>
-        <input type="password" class="form__input" formControlName="oldPassword">
-        <div class="error__popup">
-          <p *ngIf="errors.includes('badPassword') && !myForm2.get('oldPassword')?.hasError('required') && submitted">Błędne hasło</p>
-          <p *ngIf="myForm2.get('oldPassword')?.hasError('required') && submitted">Puste Pole</p>
-        </div>
-    </div>
+    <app-input-wrapper
+    [inputLabel]="'Stare hasło'"
+    [inputPlaceholder]="''"
+    [inputType]="'password'"
+    [submitted]="passwordSubmitted"
+    [control]="oldPasswordInput">
+    </app-input-wrapper>
 
-    <div class="input__wrapper">
-      <p>Nowe hasło:</p>
-        <input type="password" class="form__input" formControlName="newPassword">
-        <div class="error__popup">
-          <p *ngIf="myForm2.get('newPassword')?.hasError('invalidPassword') && !myForm2.get('newPassword')?.hasError('required') && submitted">Błędne hasło</p>
-          <p *ngIf="myForm2.get('newPassword')?.hasError('required') && submitted">Puste Pole</p>
-        </div>
-    </div>
+    <app-input-wrapper
+    [inputLabel]="'Nowe hasło'"
+    [inputPlaceholder]="''"
+    [inputType]="'password'"
+    [submitted]="passwordSubmitted"
+    [control]="newPasswordInput">
+    </app-input-wrapper>
 
-    <div class="input__wrapper">
-      <p>Powtórz nowe hasło:</p>
-        <input type="password" class="form__input" formControlName="repeatNewPassword">
-        <div class="error__popup">
-          <p *ngIf="myForm2.get('newPassword')?.hasError('passwordMismatch') && !myForm2.get('repeatNewPassword')?.hasError('required') && submitted">Hasła nie są identyczne</p>
-          <p *ngIf="myForm2.get('repeatNewPassword')?.hasError('required') && submitted">Puste Pole</p>
-          <p *ngIf="errors.includes('databaseError') && submitted"> Coś poszło nie tak </p>
-          <p *ngIf="errors.includes('passwordUpdated')" class="successful">Hasło zaktualizowane</p>
-        </div>
-    </div>
+    <app-input-wrapper
+    [inputLabel]="'Powtórz hasło'"
+    [inputPlaceholder]="''"
+    [inputType]="'password'"
+    [submitted]="passwordSubmitted"
+    [control]="repeatNewPasswordInput">
+    </app-input-wrapper>
     <button type="submit" class="submit__button">Zmień hasło</button>
 
   </form>

@@ -1,33 +1,42 @@
 <p class="title">Koszyk</p>
-<p class="title__small" *ngIf="items.length == 0">Koszyk jest pusty</p>
-<div class="title__small__margin" *ngIf="items.length != 0 && !loginStatus">Zaloguj się by móc kupić produkty</div>
+
+@if (items.length == 0) {
+  <p class="title__small">Koszyk jest pusty</p>
+} @else if (items.length != 0 && !loginStatus) {
+  <p class="title__small__margin">Zaloguj się by móc kupić produkty</p>
+}
+
 <div class="items__wrapper">
-  <app-item
-    class="wrap"
-    *ngFor="let itemEl of items;"
-    [item] = "itemEl.item"
-    [itemQuantity]="itemEl.quantity"
-    [showQuantity]="'input'"
-    [showBorder]="true"
-    [showRating]="false"
-    [showButtonFavorite]="false"
-    [showButtonCart]="true"
-    [showDescription]="false"
-    [clickable]="false"
-    [itemNameLength]="'medium'"
-    [columnAmount]="'one'"
-    [imageSize]="'medium'"
-    [itemSize]="'medium'"
-    [buttonPlacment]="'side'"
-    [whichButtonFirst]="'cart'"
-    (quantityChange)="handleQuantityChange($event)"
-  ></app-item>
+  @for (itemEl of items; track itemEl.item.item_id) {
+    <app-item
+      class="wrap"
+      [item]="itemEl.item"
+      [itemQuantity]="itemEl.quantity"
+      [showQuantity]="'input'"
+      [showBorder]="true"
+      [showRating]="false"
+      [showButtonFavorite]="false"
+      [showButtonCart]="true"
+      [showDescription]="false"
+      [clickable]="false"
+      [itemNameLength]="'medium'"
+      [columnAmount]="'one'"
+      [imageSize]="'medium'"
+      [itemSize]="'medium'"
+      [buttonPlacment]="'side'"
+      [whichButtonFirst]="'cart'"
+      (quantityChange)="handleQuantityChange($event)"
+    ></app-item>
+  }
 </div>
-<div *ngIf="items.length != 0 && loginStatus">
+@if (items.length != 0 && loginStatus) {
   <p class="title">Złóż zamówienie</p>
-  <app-cart-form class="wrapper"
-  [items]="items"
-  [loginStatus]="loginStatus"
-  [user]="user"
-  [totalCost]="totalCost"></app-cart-form>
-</div>
+  <app-cart-form
+    class="wrapper"
+    [items]="items"
+    [loginStatus]="loginStatus"
+    [user]="user"
+    [totalCost]="totalCost">
+  </app-cart-form>
+}
+

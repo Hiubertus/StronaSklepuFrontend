@@ -1,16 +1,12 @@
 import {Component, Input, Output} from '@angular/core';
 import { EventEmitter} from "@angular/core";
-import {NgForOf, NgIf} from "@angular/common";
 import {MatIcon} from "@angular/material/icon";
-import {Review} from "../../../models/review.model";
 
 @Component({
   selector: 'app-pagination',
   standalone: true,
   imports: [
-    NgForOf,
-    MatIcon,
-    NgIf
+    MatIcon
   ],
   templateUrl: './pagination.component.html',
   styleUrl: './pagination.component.scss'

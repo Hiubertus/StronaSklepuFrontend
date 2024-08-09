@@ -1,18 +1,27 @@
-<div class="pagination" *ngIf="totalReviews!=0">
-  <button (click)="onFilterChange()">
-    <mat-icon *ngIf="filter=='rate'">star</mat-icon>
-    <mat-icon *ngIf="filter=='date'">calendar_month</mat-icon>
-  </button>
-  <button (click)="onSortChange()">
-    <mat-icon *ngIf="sort=='asc'">arrow_upward</mat-icon>
-    <mat-icon *ngIf="sort=='desc'">arrow_downward</mat-icon>
-  </button>
-</div>
+@if (totalReviews!=0) {
+  <div class="pagination">
+    <button (click)="onFilterChange()">
+      @if (filter=='rate'){
+        <mat-icon>star</mat-icon>
+      } @else if (filter=='date') {
+        <mat-icon>calendar_month</mat-icon>
+      }
+    </button>
+    <button (click)="onSortChange()">
+      @if(sort=='asc') {
+        <mat-icon>arrow_upward</mat-icon>
+      } @else if (sort=='desc') {
+        <mat-icon>arrow_downward</mat-icon>
+      }
+    </button>
+  </div>
+}
 <div class="pagination">
-  <button
-    *ngFor="let page of pages"
-    [disabled]="page === '...'"
-    (click)="onPageChange(page)">
-    {{ page }}
-  </button>
+  @for (page of pages; track page) {
+    <button
+      [disabled]="page === '...'"
+      (click)="onPageChange(page)">
+      {{ page }}
+    </button>
+  }
 </div>

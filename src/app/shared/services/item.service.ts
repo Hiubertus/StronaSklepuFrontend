@@ -4,7 +4,7 @@ import {Subject} from "rxjs";
 import {HttpClient, HttpParams} from "@angular/common/http";
 import {AuthService} from "./auth.service";
 import {LocalStorageService} from "./local-storage.service";
-import {environment} from "../../enviroments/enviroment";
+import {environment} from "../../../enviroments/enviroment";
 
 @Injectable({
   providedIn: 'root'
@@ -14,42 +14,54 @@ export class ItemService {
   apiUrl = environment.apiUrl
 
   private items: Item[] = []
-  private cartItems: {item_id: number, quantity: number}[] = []
+  private cartItems: { item_id: number, quantity: number }[] = []
   private favoriteItems: number[] = []
 
   itemsChanged = new Subject<Item[]>();
-  cartChanged = new Subject<{item: Item, quantity: number}[]>()
+  cartChanged = new Subject<{ item: Item, quantity: number }[]>()
   favoriteChanged = new Subject<Item[]>();
 
   constructor(private http: HttpClient, private authService: AuthService, private localStorage: LocalStorageService) {
   }
+
   async getItemFromDb(item_id: number) {
-    this.http.get<Item>(`${this.apiUrl}/Item`, { params: new HttpParams().set('item_id', item_id.toString()) })
-      .subscribe((data: Item) => {
-        const index = this.items.findIndex(item => item.item_id == item_id);
-        if (index !== -1) {
-          this.items[index] = data;
-        } else {
-          this.items.push(data);
+    this.http.get<Item>(`${this.apiUrl}/Item`, {params: new HttpParams().set('item_id', item_id.toString())})
+      .subscribe({
+        next: (data: Item) => {
+          const index = this.items.findIndex(item => item.item_id == item_id);
+          if (index !== -1) {
+            this.items[index] = data;
+          } else {
+            this.items.push(data);
+          }
+          this.itemsChanged.next(this.items);
+        }, error: (err: any) => {
+          console.error('Error fetching items:', err);
+          this.itemsChanged.error(err);
         }
-        this.itemsChanged.next(this.items);
       });
   }
 
   async getItemsFromDb() {
     this.http.get<Item[]>(`${this.apiUrl}/Items`
-    ).subscribe((data: Item[]) => {
-      this.items = data
-      this.itemsChanged.next(this.items);
+    ).subscribe({
+      next: (data) => {
+        this.items = data
+        this.itemsChanged.next(this.items);
 
-      this.loadCartFromStorage()
-      this.cartChanged.next(this.getCart())
+        this.loadCartFromStorage()
+        this.cartChanged.next(this.getCart())
 
-      this.loadFavoriteFromStorage()
-      this.favoriteChanged.next(this.getFavorite())
+        this.loadFavoriteFromStorage()
+        this.favoriteChanged.next(this.getFavorite())
+      }, error: (err: any) => {
+        console.error('Error fetching items:', err);
+        this.itemsChanged.error(err);
+      }
     })
   }
-  setItemQuantity(item: {item_id: number, quantity: number}) {
+
+  setItemQuantity(item: { item_id: number, quantity: number }) {
     const itemIndex = this.cartItems.findIndex(i => i.item_id == item.item_id);
     if (itemIndex != -1) {
       this.cartItems[itemIndex].quantity = item.quantity;
@@ -71,12 +83,13 @@ export class ItemService {
       .map(cartItem => {
         const item = this.getItem(cartItem.item_id);
         if (item) {
-          return { item, quantity: cartItem.quantity };
+          return {item, quantity: cartItem.quantity};
         }
         return null;
       })
       .filter(cartItem => cartItem != null) as { item: Item, quantity: number }[];
   }
+
   getFavorite() {
     return this.favoriteItems.map(item_id => this.getItem(item_id)).filter(item => item != null);
   }

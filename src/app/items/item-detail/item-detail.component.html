@@ -1,6 +1,9 @@
 <div class="position__relative">
   <app-return-button></app-return-button>
   <p class="title">Przedmiot</p>
+  @if(errorItem) {
+    <p class="title__small">Pobranie przedmiotu z bazy nie powiodło się</p>
+  }
   <app-item
     [item]="item"
     [itemQuantity]="null"
@@ -18,11 +21,20 @@
     [buttonPlacment]="'bottom'"
     [whichButtonFirst]="'fav'"
   ></app-item>
+  @if (item) {
+    <div class="wrapper">
+      <p class="title">Opinie:</p>
+      @if (item.review_amount == 0 && !errorReview) {
+        <p class="title__small">Nie ma opinii na temat tego produktu</p>
+      } @else if (errorReview) {
+        <p class="title__small">Pobranie Recenzji z bazy nie powdiodło się</p>
+      } @else if (!errorReview) {
+        <app-review-section
+          [totalReviews]="item.review_amount"
+          (errorReview)="handleReviewError()"></app-review-section>
+      }
+    </div>
+  }
 </div>
 
-<div class="wrapper" *ngIf="item">
-  <p class="title">Opinie:</p>
-  <p class="title__small" *ngIf="item.review_amount == 0">Nie ma opinii na temat tego produktu</p>
-  <app-review-section
-  [totalReviews]="item.review_amount"></app-review-section>
-</div>
+

@@ -1,31 +1,39 @@
-
 <div class="position__relative">
   <app-return-button></app-return-button>
   <p class="title">Zamówienie</p>
-  <div class="wrapper" *ngIf="order">
-
-    <div class="section__wrapper">
-      <p class="title__small">Dane zamówienia:</p>
-      <app-order
-        [order]="order"
-        [showBorder]="false"
-        [clickable]="false"
-        [useMargin]="false"
-        [dataLength]="'full'"
-      ></app-order>
-      <div class="placeholder"></div>
-      <div class="placeholder"></div>
+  @if (errorOrder) {
+    <p class="title__small">Pobranie zamówienia nie powiodło się</p>
+  } @else if (order && !errorOrder) {
+    <div class="wrapper">
+      <div class="section__wrapper">
+        <p class="title__small">Dane zamówienia:</p>
+        <app-order
+          [order]="order"
+          [showBorder]="false"
+          [clickable]="false"
+          [useMargin]="false"
+          [dataLength]="'full'"
+        ></app-order>
+        <div class="placeholder"></div>
+        <div class="placeholder"></div>
+      </div>
+      <div class="section__wrapper">
+        <p class="title__small">Zakupione przedmioty:</p>
+        <app-carousel
+          [order]="order"
+        ></app-carousel>
+      </div>
     </div>
-
-    <div class="section__wrapper">
-      <p class="title__small">Zakupione przedmioty:</p>
-      <app-carousel
-        [order]="order"
-      ></app-carousel>
-    </div>
-  </div>
-  <app-statuses
-    [order_id]="order_id"></app-statuses>
+  }
+  <p class="title">Status Zamówienia</p>
+  @if (errorStatuses) {
+    <p class="title__small">Pobranie statusów z bazy nie powiodło się</p>
+  } @else if (!errorStatuses) {
+    <app-statuses
+      [order_id]="order_id"
+      (statusesError)="handleStatusesError()"
+    ></app-statuses>
+  }
 </div>
 
 

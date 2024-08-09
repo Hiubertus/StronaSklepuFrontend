@@ -1,4 +1,6 @@
-<p class="title__small" *ngIf="!loginStatus"> Zaloguj się aby moc dać recenzje: </p>
+@if(!loginStatus) {
+  <p class="title__small"> Zaloguj się aby moc dać recenzje: </p>
+}
 <app-pagination
   [userHasReview]="userHasReview"
   [totalReviews]="totalReviews"
@@ -22,13 +24,14 @@
 ></app-review-form>
 
 <div class="review__order">
-  <app-review *ngFor="let review of reviews"
-              [review]="review"
-              [loginStatus]="loginStatus"
-              [item_id]="item_id"
-              [user]="user"
-              [filter]="filter"
-              [sort]="sort"
-              (editStart)="handleEditMode($event)"
-  ></app-review>
+  @for (review of reviews; track review.review_id) {
+    <app-review [review]="review"
+                [loginStatus]="loginStatus"
+                [item_id]="item_id"
+                [user]="user"
+                [filter]="filter"
+                [sort]="sort"
+                (editStart)="handleEditMode($event)"
+    ></app-review>
+  }
 </div>

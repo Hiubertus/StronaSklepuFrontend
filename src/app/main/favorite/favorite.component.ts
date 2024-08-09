@@ -1,8 +1,7 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ItemComponent} from "../../items/item-list/item/item.component";
-import {NgForOf, NgIf} from "@angular/common";
-import {ItemService} from "../../services/item.service";
-import {Item} from "../../models/item.model";
+import {ItemService} from "../../shared/services/item.service";
+import {Item} from "../../shared/models/item.model";
 import {Subscription} from "rxjs";
 
 @Component({
@@ -10,8 +9,6 @@ import {Subscription} from "rxjs";
   standalone: true,
   imports: [
     ItemComponent,
-    NgForOf,
-    NgIf
   ],
   templateUrl: './favorite.component.html',
   styleUrl: './favorite.component.scss'

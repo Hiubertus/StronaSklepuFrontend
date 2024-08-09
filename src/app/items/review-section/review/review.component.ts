@@ -1,9 +1,9 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
-import {DatePipe, NgClass, NgForOf, NgIf} from "@angular/common";
+import {DatePipe, NgClass} from "@angular/common";
 import {MatIcon} from "@angular/material/icon";
-import {Review} from "../../../models/review.model";
-import {User} from "../../../models/user.model";
-import {ReviewService} from "../../../services/review.service";
+import {Review} from "../../../shared/models/review.model";
+import {User} from "../../../shared/models/user.model";
+import {ReviewService} from "../../../shared/services/review.service";
 
 @Component({
   selector: 'app-review',
@@ -11,8 +11,6 @@ import {ReviewService} from "../../../services/review.service";
   imports: [
     DatePipe,
     MatIcon,
-    NgForOf,
-    NgIf,
     NgClass
   ],
   templateUrl: './review.component.html',

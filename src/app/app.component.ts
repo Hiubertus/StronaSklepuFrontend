@@ -4,8 +4,8 @@ import {
 } from '@angular/core';
 import {RouterOutlet} from '@angular/router';
 import {NavComponent} from "./nav/nav.component";
-import {ItemService} from "./services/item.service";
-import {AuthService} from "./services/auth.service";
+import {ItemService} from "./shared/services/item.service";
+import {AuthService} from "./shared/services/auth.service";
 
 @Component({
   selector: 'app-root',

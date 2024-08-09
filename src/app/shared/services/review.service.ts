@@ -4,7 +4,7 @@ import {Subject} from "rxjs";
 import {HttpParams, HttpClient} from "@angular/common/http";
 import {AuthService} from "./auth.service";
 import {ItemService} from "./item.service";
-import {environment} from "../../enviroments/enviroment";
+import {environment} from "../../../enviroments/enviroment";
 
 @Injectable({
   providedIn: 'root'

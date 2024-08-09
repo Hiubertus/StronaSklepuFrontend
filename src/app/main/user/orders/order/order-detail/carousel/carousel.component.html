@@ -3,21 +3,22 @@
   (mouseup)="carouselUp()"
   (mouseleave)="carouselLeave()"
   (mousemove)="carouselMove($event)">
-  <app-item *ngFor="let item of order.items"
-            [item]="item.item"
-            [itemQuantity]="item.quantity"
-            [showQuantity]="'number'"
-            [showBorder]="false"
-            [showRating]="false"
-            [showButtonFavorite]="false"
-            [showButtonCart]="false"
-            [showDescription]="false"
-            [clickable]="false"
-            [itemNameLength]="'medium'"
-            [columnAmount]="'one'"
-            [imageSize]="'small'"
-            [itemSize]="'small'"
-            [buttonPlacment]="'side'"
-            [whichButtonFirst]="'fav'">
-  </app-item>
+  @for (item of order.items; track item.item.item_id) {
+    <app-item [item]="item.item"
+              [itemQuantity]="item.quantity"
+              [showQuantity]="'number'"
+              [showBorder]="false"
+              [showRating]="false"
+              [showButtonFavorite]="false"
+              [showButtonCart]="false"
+              [showDescription]="false"
+              [clickable]="false"
+              [itemNameLength]="'medium'"
+              [columnAmount]="'one'"
+              [imageSize]="'small'"
+              [itemSize]="'small'"
+              [buttonPlacment]="'side'"
+              [whichButtonFirst]="'fav'">
+    </app-item>
+  }
 </div>

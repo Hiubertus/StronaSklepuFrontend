@@ -1,8 +1,10 @@
 .wrapper {
   display: flex;
-  width: 360px;
+  //width: 360px;
+  width: clamp(360px, 100vw, 760px);
   flex-direction: column;
   position: relative;
+  align-items: center;
   margin-bottom: 100px;
 }
 .message {

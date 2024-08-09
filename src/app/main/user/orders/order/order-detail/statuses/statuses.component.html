@@ -1,4 +1,7 @@
-<div>
-  <app-status *ngFor="let status of statuses"
-  [status]="status"></app-status>
+<div class="wrapper">
+  @for (status of statuses; track status.status_id) {
+    <app-status
+      class="zindexHigher"
+      [status]="status"></app-status>
+  }
 </div>

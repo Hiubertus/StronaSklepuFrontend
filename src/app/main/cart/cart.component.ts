@@ -1,13 +1,11 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ItemComponent} from "../../items/item-list/item/item.component";
-import {NgForOf, NgIf} from "@angular/common";
-import {Item} from "../../models/item.model";
-import {ItemService} from "../../services/item.service";
+import {Item} from "../../shared/models/item.model";
+import {ItemService} from "../../shared/services/item.service";
 import {Subscription} from "rxjs";
-import {FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
-import {AuthService} from "../../services/auth.service";
-import {User} from "../../models/user.model";
-import {OrderService} from "../../services/order.service";
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
+import {AuthService} from "../../shared/services/auth.service";
+import {User} from "../../shared/models/user.model";
 import {CartFormComponent} from "./cart-form/cart-form.component";
 
 @Component({
@@ -15,8 +13,6 @@ import {CartFormComponent} from "./cart-form/cart-form.component";
   standalone: true,
   imports: [
     ItemComponent,
-    NgForOf,
-    NgIf,
     ReactiveFormsModule,
     FormsModule,
     CartFormComponent

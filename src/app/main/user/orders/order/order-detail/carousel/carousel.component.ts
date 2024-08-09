@@ -1,14 +1,12 @@
 import {Component, ElementRef, Input, ViewChild} from '@angular/core';
 import {ItemComponent} from "../../../../../../items/item-list/item/item.component";
-import {NgForOf} from "@angular/common";
-import {Order} from "../../../../../../models/order.model";
+import {Order} from "../../../../../../shared/models/order.model";
 
 @Component({
   selector: 'app-carousel',
   standalone: true,
   imports: [
-    ItemComponent,
-    NgForOf
+    ItemComponent
   ],
   templateUrl: './carousel.component.html',
   styleUrl: './carousel.component.scss'

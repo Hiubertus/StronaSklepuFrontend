@@ -1,8 +1,8 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {Order} from "../../../../../models/order.model";
+import {Order} from "../../../../../shared/models/order.model";
 import {ActivatedRoute} from "@angular/router";
-import {OrderService} from "../../../../../services/order.service";
-import {DatePipe, NgForOf, NgIf, NgStyle} from "@angular/common";
+import {OrderService} from "../../../../../shared/services/order.service";
+import {DatePipe, NgStyle} from "@angular/common";
 import {Subscription} from "rxjs";
 import {ItemComponent} from "../../../../../items/item-list/item/item.component";
 import {CarouselComponent} from "./carousel/carousel.component";
@@ -15,9 +15,7 @@ import {StatusesComponent} from "./statuses/statuses.component";
   selector: 'app-order-detail',
   standalone: true,
   imports: [
-    NgForOf,
     NgStyle,
-    NgIf,
     ItemComponent,
     CarouselComponent,
     DatePipe,
@@ -33,12 +31,19 @@ export class OrderDetailComponent implements OnInit, OnDestroy{
   order!: Order
   orderSubscription!: Subscription
   order_id!: number
+  errorStatuses: boolean = false
+  errorOrder: boolean = false
   constructor(private route: ActivatedRoute, private orderService: OrderService) {}
   async ngOnInit() {
     this.order_id = this.route.snapshot.params['order_id'];
     this.order = this.orderService.getOrder(this.order_id)
-    this.orderSubscription = this.orderService.ordersChange.subscribe(() => {
-      this.order = this.orderService.getOrder(this.order_id)
+    this.orderSubscription = this.orderService.ordersChange.subscribe({
+      next: () => {
+          this.order = this.orderService.getOrder(this.order_id)
+      },
+      error: () => {
+        this.errorOrder = true
+      }
     })
     if(!this.order) {
       await this.orderService.getOrderFromDb(this.order_id)
@@ -51,5 +56,8 @@ export class OrderDetailComponent implements OnInit, OnDestroy{
   }
   ngOnDestroy() {
     this.orderSubscription.unsubscribe()
+  }
+  handleStatusesError() {
+    this.errorStatuses = true
   }
 }

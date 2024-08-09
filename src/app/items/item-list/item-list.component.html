@@ -1,23 +1,27 @@
 <p class="title">Sklep</p>
+@if(error) {
+  <p class="title__small">Pobranie przedmiotów z bazy nie powiodło się</p>
+}
 <div class="items__wrapper">
-  <app-item
-    class="wrap"
-    *ngFor="let itemEl of items;"
-    [item] = "itemEl"
-    [itemQuantity]="null"
-    [showQuantity]="false"
-    [showBorder]="true"
-    [showRating]="true"
-    [showButtonFavorite]="true"
-    [showButtonCart]="true"
-    [showDescription]="false"
-    [clickable]="true"
-    [itemNameLength]="'big'"
-    [columnAmount]="'one'"
-    [imageSize]="'medium'"
-    [itemSize]="'medium'"
-    [buttonPlacment]="'side'"
-    [whichButtonFirst]="'fav'"
-  ></app-item>
+  @for (itemEl of items; track itemEl.item_id) {
+    <app-item
+      class="wrap"
+      [item] = "itemEl"
+      [itemQuantity]="null"
+      [showQuantity]="false"
+      [showBorder]="true"
+      [showRating]="true"
+      [showButtonFavorite]="true"
+      [showButtonCart]="true"
+      [showDescription]="false"
+      [clickable]="true"
+      [itemNameLength]="'big'"
+      [columnAmount]="'one'"
+      [imageSize]="'medium'"
+      [itemSize]="'medium'"
+      [buttonPlacment]="'side'"
+      [whichButtonFirst]="'fav'"
+    ></app-item>
+  }
 </div>
 

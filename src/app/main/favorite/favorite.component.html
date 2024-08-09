@@ -1,24 +1,27 @@
 <p class="title">Ulubione</p>
-<p class="title__small" *ngIf="items.length == 0">Nie ma zapisanych produktów</p>
+@if(items.length == 0) {
+  <p class="title__small">Nie ma zapisanych produktów</p>
+}
 <div class="items__wrapper">
-  <app-item
-    class="wrap"
-    *ngFor="let itemEl of items"
-    [item] = "itemEl"
-    [itemQuantity]="null"
-    [showQuantity]="false"
-    [showBorder]="true"
-    [showRating]="false"
-    [showButtonFavorite]="true"
-    [showButtonCart]="true"
-    [showDescription]="false"
-    [clickable]="true"
-    [itemNameLength]="'medium'"
-    [columnAmount]="'one'"
-    [imageSize]="'medium'"
-    [itemSize]="'medium'"
-    [buttonPlacment]="'side'"
-    [whichButtonFirst]="'fav'"
-  ></app-item>
+  @for (itemEl of items; track itemEl.item_id) {
+    <app-item
+      class="wrap"
+      [item] = "itemEl"
+      [itemQuantity]="null"
+      [showQuantity]="false"
+      [showBorder]="true"
+      [showRating]="false"
+      [showButtonFavorite]="true"
+      [showButtonCart]="true"
+      [showDescription]="false"
+      [clickable]="true"
+      [itemNameLength]="'medium'"
+      [columnAmount]="'one'"
+      [imageSize]="'medium'"
+      [itemSize]="'medium'"
+      [buttonPlacment]="'side'"
+      [whichButtonFirst]="'fav'"
+    ></app-item>
+  }
 </div>
 

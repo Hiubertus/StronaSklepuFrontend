@@ -3,7 +3,7 @@ import {HttpClient} from "@angular/common/http";
 import {Subject} from "rxjs";
 import {User} from "../models/user.model";
 import {LocalStorageService} from "./local-storage.service";
-import {environment} from "../../enviroments/enviroment";
+import {environment} from "../../../enviroments/enviroment";
 
 @Injectable({
   providedIn: 'root'
@@ -66,12 +66,10 @@ export class AuthService {
 
   async registerUser
   (username: string, email: string, password: string):
-  //(name: string, surname: string, password: string, email: string):
     Promise<{
 
     message: string
   }> {
-    //const user = {name, surname, password, email};
     const user = { username, email, password}
     return new Promise<{message: string }>((resolve, reject) => {
       this.http.post<{ message: string }>(`${this.apiUrl}/registerUser`, user).subscribe({

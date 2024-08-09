@@ -1,5 +1,5 @@
 import {Component, Input} from '@angular/core';
-import {Order} from "../../../../models/order.model";
+import {Order} from "../../../../shared/models/order.model";
 import {MatIcon} from "@angular/material/icon";
 import {Router} from "@angular/router";
 import {DatePipe, NgClass, SlicePipe} from "@angular/common";

@@ -1,8 +1,8 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {MatIconModule} from "@angular/material/icon";
-import {Item} from "../../../models/item.model";
-import {ItemService} from "../../../services/item.service";
-import {NgClass, NgForOf, NgIf, NgStyle, SlicePipe} from "@angular/common";
+import {Item} from "../../../shared/models/item.model";
+import {ItemService} from "../../../shared/services/item.service";
+import {NgClass, NgStyle, SlicePipe} from "@angular/common";
 import {FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
 import {Router} from "@angular/router";
 
@@ -13,8 +13,6 @@ import {Router} from "@angular/router";
     MatIconModule,
     NgClass,
     FormsModule,
-    NgIf,
-    NgForOf,
     NgStyle,
     SlicePipe,
     ReactiveFormsModule

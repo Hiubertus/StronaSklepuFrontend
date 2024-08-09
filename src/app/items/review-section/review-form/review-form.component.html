@@ -1,29 +1,43 @@
-<form [formGroup]="myForm" (ngSubmit)="submitReview()" class="your__review" *ngIf="loginStatus && (!userHasReview || editMode)">
-  <p class="title__small"> Napisz Recenzję: </p>
-  <button *ngIf="editMode" (click)="cancelEditReview()" class="review__button"><mat-icon>close</mat-icon></button>
-  <div formGroupName="rating">
-    <ng-container *ngFor="let star of [1, 2, 3, 4, 5]">
-      <mat-icon
-        class="review__star"
-        (mouseover)="enter(star)"
-        (click)="setRating(star)"
-        (mouseleave)="leave()"
-      >
-        {{ hoverState >= star ? 'star' : 'star_outline' }}
-      </mat-icon>
-    </ng-container>
-  </div>
-
-  <textarea class="review__input" placeholder="Napisz recenzję (opcjonalne)" formControlName="reviewText"></textarea>
-  <button class="review__submit__button" type="submit" >
-    <p *ngIf="!editMode">Wstaw Recenzję</p>
-    <p *ngIf="editMode">Zmodyfikuj Recenzje</p>
-  </button>
-  <div class="error__wrapper">
-    <div class="error__popup">
-      <p *ngIf="!myForm.get('reviewText')?.hasError('maxlength') && myForm.get('rating')?.hasError('invalidRating') && submitted">Wybierz ocenę</p>
-      <p *ngIf="myForm.get('reviewText')?.hasError('maxlength') && submitted">Recenzja za długa</p>
+@if (loginStatus && (!userHasReview || editMode)) {
+  <form [formGroup]="myForm" (ngSubmit)="submitReview()" class="your__review">
+    <p class="title__small"> Napisz Recenzję: </p>
+    @if (editMode) {
+      <button (click)="cancelEditReview()" class="review__button"><mat-icon>close</mat-icon></button>
+    }
+    <div formGroupName="rating">
+      @for (star of [1, 2, 3, 4, 5];track star){
+        <ng-container>
+          <mat-icon
+            class="review__star"
+            (mouseover)="enter(star)"
+            (click)="setRating(star)"
+            (mouseleave)="leave()"
+          >
+            {{ hoverState >= star ? 'star' : 'star_outline' }}
+          </mat-icon>
+        </ng-container>
+      }
     </div>
-  </div>
 
-</form>
+    <textarea class="review__input" placeholder="Napisz recenzję (opcjonalne)" formControlName="reviewText"></textarea>
+    <button class="review__submit__button" type="submit" >
+      @if(!editMode) {
+        <p>Wstaw Recenzję</p>
+      } @else if (editMode) {
+        <p>Zmodyfikuj Recenzje</p>
+      }
+    </button>
+    <div class="error__wrapper">
+      <div class="error__popup">
+        @if (!myForm.get('reviewText')?.hasError('maxlength') && myForm.get('rating')?.hasError('invalidRating') && submitted) {
+          <p>Wybierz ocenę</p>
+        }
+        @else if (myForm.get('reviewText')?.hasError('maxlength') && submitted) {
+          <p>Recenzja za długa</p>
+        }
+      </div>
+    </div>
+
+  </form>
+}
+

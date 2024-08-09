@@ -41,23 +41,23 @@
     </li>
 
     <li class="show5">
-      <a
-        *ngIf="!loginStatus"
-        routerLink="/auth/login"
-        routerLinkActive="active-link"
-        aria-current="page"
-        ariaCurrentWhenActive="page">
-        <mat-icon>login</mat-icon><p>Zaloguj</p>
-      </a>
-      <a
-        *ngIf="loginStatus"
-         routerLink="/user"
-         routerLinkActive="active-link"
-         aria-current="page"
-         ariaCurrentWhenActive="page">
-        <mat-icon>person</mat-icon><p>Konto</p>
-      </a>
+      @if (!loginStatus) {
+        <a
+          routerLink="/auth/login"
+          routerLinkActive="active-link"
+          aria-current="page"
+          ariaCurrentWhenActive="page">
+          <mat-icon>login</mat-icon><p>Zaloguj</p>
+        </a>
+      } @else if (loginStatus) {
+        <a
+          routerLink="/user"
+          routerLinkActive="active-link"
+          aria-current="page"
+          ariaCurrentWhenActive="page">
+          <mat-icon>person</mat-icon><p>Konto</p>
+        </a>
+      }
     </li>
-
   </ul>
 </div>

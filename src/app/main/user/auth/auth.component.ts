@@ -1,24 +1,30 @@
 import {Component, OnInit} from '@angular/core';
-import {AbstractControl, FormControl, FormGroup, ReactiveFormsModule, ValidatorFn, Validators} from "@angular/forms";
+import {
+  FormControl,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators
+} from "@angular/forms";
 import {ActivatedRoute, Router, RouterLink, RouterLinkActive} from "@angular/router";
-import {AuthService} from "../../../services/auth.service";
-import {NgClass, NgIf} from "@angular/common";
+import {AuthService} from "../../../shared/services/auth.service";
+import {NgClass} from "@angular/common";
+import {InputWrapperComponent} from "../../../shared/components/input-wrapper/input-wrapper.component";
+import {passwordMatchValidator, passwordValidator} from "../../../shared/validators.model";
 
 @Component({
   selector: 'app-auth',
   standalone: true,
   imports: [
-    NgIf,
     ReactiveFormsModule,
     RouterLink,
     RouterLinkActive,
-    NgClass
+    NgClass,
+    InputWrapperComponent
   ],
   templateUrl: './auth.component.html',
   styleUrl: './auth.component.scss'
 })
 export class AuthComponent implements OnInit {
-  errors: string[] = [];
   submitted: boolean = false;
 
   loginForm!: FormGroup;
@@ -26,9 +32,7 @@ export class AuthComponent implements OnInit {
 
   authMode!: "login" | "register";
 
-  constructor(private route: ActivatedRoute,
-              private router: Router,
-              private authService: AuthService) {
+  constructor(private route: ActivatedRoute, private router: Router, private authService: AuthService) {
   }
 
   ngOnInit() {
@@ -37,8 +41,8 @@ export class AuthComponent implements OnInit {
       this.authMode = params['authMode'];
     })
     this.loginForm = new FormGroup({
-      email: new FormControl('', Validators.required),
-      password: new FormControl('', Validators.required)
+      email: new FormControl('', [Validators.required, Validators.email]),
+      password: new FormControl('', [Validators.required, Validators.minLength(9), passwordValidator()])
     })
     this.registerForm = new FormGroup({
       username: new FormControl('', [
@@ -48,106 +52,116 @@ export class AuthComponent implements OnInit {
         Validators.pattern(/^\S*$/)
       ]),
       email: new FormControl('', [
-          Validators.required,
-          Validators.minLength(5),
-          Validators.email
+        Validators.required,
+        Validators.minLength(5),
+        Validators.email
       ]),
-      password: new FormControl('', [
-          Validators.required,
-          Validators.minLength(9),
-          this.passwordValidator()
+      newPassword: new FormControl('', [
+        Validators.required,
+        Validators.minLength(9),
+        passwordValidator()
       ]),
-      password2: new FormControl('', [
-          Validators.required,
-          this.passwordMatchValidator()
+      repeatNewPassword: new FormControl('', [
+        Validators.required,
+        Validators.minLength(9),
+        passwordMatchValidator()
       ]),
     })
   }
+
   changeAuthPage(page: 'login' | 'register') {
-    this.errors = [];
     this.submitted = false;
-    if(page == 'register') {
+
+    if (page == 'register') {
+      this.registerForm.reset()
       this.router.navigate(['/auth/login'])
     }
-    if(page == 'login') {
+    if (page == 'login') {
+      this.loginForm.reset();
       this.router.navigate(['/auth/register'])
     }
   }
+
   async onSubmit() {
     this.submitted = true;
-    if(this.authMode == 'login') {
+    if (this.authMode == 'login') {
       if (this.loginForm.valid) {
         try {
           const result = await this.authService.loginUser(
             this.loginForm.value.email,
             this.loginForm.value.password)
           if (result) {
-            this.loginForm.reset();
             this.submitted = false;
-            this.errors = [];
-            this.errors.push('accountLogged');
+            this.loginForm.get('password')?.setErrors({ success: true })
             await this.router.navigate(['/user']);
           }
         } catch (error: any) {
-          console.error(error)
           if (error.message === 'badPassword') {
-            this.errors.push('badPassword');
-          } if (error.message === 'emailNonExist') {
-            this.errors.push('emailNonExist');
-          } if (error.message === 'databaseError') {
-            this.errors.push('databaseError');
+            this.loginForm.get('password')?.setErrors({badPassword: true});
+          }
+          if (error.message === 'emailNonExist') {
+            this.loginForm.get('email')?.setErrors({emailNonExist: true});
+          }
+          if (error.message === 'databaseError') {
+            this.loginForm.get('password')?.setErrors({databaseError: true});
           }
         }
       }
     }
-    if(this.authMode == 'register') {
+    if (this.authMode == 'register') {
       if (this.registerForm.valid) {
         try {
           const result = await this.authService.registerUser(
             this.registerForm.value.username,
             this.registerForm.value.email,
-            this.registerForm.value.password
+            this.registerForm.value.newPassword
           );
           if (result) {
             this.registerForm.reset();
             this.submitted = false;
-            this.errors = [];
-            this.registerForm.disable()
-            this.errors.push('accountCreated');
+            this.registerForm.disable();
+            this.registerForm.get('repeatNewPassword')?.setErrors({ success: true });
             setTimeout(async () => {
               this.changeAuthPage('register')
             }, 3000)
+
           }
         } catch (error: any) {
           if (error.message === 'emailExist') {
-            this.errors.push('emailExist');
-          } if (error.message === 'usernameExist') {
-            this.errors.push('usernameExist');
-          }  if (error.message === 'databaseError') {
-            this.errors.push('databaseError');
+            this.registerForm.get('email')?.setErrors({emailExist: true});
+          }
+          if (error.message === 'usernameExist') {
+            this.registerForm.get('username')?.setErrors({usernameExist: true});
+          }
+          if (error.message === 'databaseError') {
+            this.registerForm.get('repeatNewPassword')?.setErrors({databaseError: true});
           }
         }
       }
     }
   }
 
-  passwordValidator(): ValidatorFn {
-    return (control: AbstractControl): { [key: string]: boolean } | null => {
-      const value: string = control.value;
-      const hasUpperCase = /[A-Z]/.test(value);
-      const hasLowerCase = /[a-z]/.test(value);
-      const hasNumber = /\d/.test(value);
-      const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(value);
-      const isValid = hasUpperCase && hasLowerCase && hasNumber && hasSpecialChar;
-      return isValid ? null : {'invalidPassword': true};
-    };
+  get emailLogin(): FormControl {
+    return this.loginForm.get('email') as FormControl;
   }
 
-  passwordMatchValidator(): ValidatorFn {
-    return (control: AbstractControl): { [key: string]: boolean } | null => {
-      const password = control.parent?.get('password')?.value;
-      const confirmPassword = control.value;
-      return password === confirmPassword ? null : {'passwordMismatch': true};
-    };
+  get passwordLogin(): FormControl {
+    return this.loginForm.get('password') as FormControl;
+  }
+
+  get usernameRegister(): FormControl {
+    return this.registerForm.get('username') as FormControl;
+  }
+
+  get emailRegister(): FormControl {
+    return this.registerForm.get('email') as FormControl;
+  }
+
+  get newPasswordRegister(): FormControl {
+    return this.registerForm.get('newPassword') as FormControl;
+  }
+
+  get repeatNewPasswordRegister(): FormControl {
+    return this.registerForm.get('repeatNewPassword') as FormControl;
   }
 }

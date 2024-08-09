@@ -5,7 +5,7 @@ import {FavoriteComponent} from "./main/favorite/favorite.component";
 import {UserComponent} from "./main/user/user.component";
 import {UserDataComponent} from "./main/user/user-data/user-data.component";
 
-import {authGuardLogged, authGuardUnlogged} from "./services/auth-guard.service";
+import {authGuardLogged, authGuardUnlogged} from "./shared/services/auth-guard.service";
 import {NgModule} from "@angular/core";
 import {OrdersComponent} from "./main/user/orders/orders.component";
 import {ItemListComponent} from "./items/item-list/item-list.component";

@@ -1,10 +1,13 @@
 import {Component, Input} from '@angular/core';
-import {Status} from "../../../../../../../models/status.model";
+import {Status} from "../../../../../../../shared/models/status.model";
+import {DatePipe} from "@angular/common";
 
 @Component({
   selector: 'app-status',
   standalone: true,
-  imports: [],
+  imports: [
+    DatePipe
+  ],
   templateUrl: './status.component.html',
   styleUrl: './status.component.scss'
 })

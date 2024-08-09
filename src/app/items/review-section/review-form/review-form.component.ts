@@ -9,8 +9,7 @@ import {
   Validators
 } from "@angular/forms";
 import {MatIcon} from "@angular/material/icon";
-import {NgForOf, NgIf} from "@angular/common";
-import {ReviewService} from "../../../services/review.service";
+import {ReviewService} from "../../../shared/services/review.service";
 
 @Component({
   selector: 'app-review-form',
@@ -18,8 +17,6 @@ import {ReviewService} from "../../../services/review.service";
     imports: [
         FormsModule,
         MatIcon,
-        NgForOf,
-        NgIf,
         ReactiveFormsModule
     ],
   templateUrl: './review-form.component.html',

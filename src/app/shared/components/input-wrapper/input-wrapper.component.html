@@ -1,0 +1,25 @@
+<div class="wrapper">
+  <div class="input__wrapper">
+    <input
+      class="input"
+      id="input"
+      [placeholder]="inputPlaceholder"
+      [type]="inputType"
+      [formControl]="control"
+    >
+    <label
+      class="label"
+      for="input"
+    >{{ inputLabel }}</label>
+    @if ((control.invalid && !control.untouched) || (control.invalid && submitted)) {
+      <p class="error">
+        {{ getErrorMessage() }}
+      </p>
+    }
+    @if (control.hasError('success')) {
+      <p class="error successful">
+        {{ getErrorMessage() }}
+      </p>
+    }
+  </div>
+</div>

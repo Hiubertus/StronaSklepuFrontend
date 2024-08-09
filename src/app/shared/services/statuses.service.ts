@@ -1,6 +1,6 @@
 import {Injectable, Input} from '@angular/core';
 import {Status} from "../models/status.model";
-import {environment} from "../../enviroments/enviroment";
+import {environment} from "../../../enviroments/enviroment";
 import {HttpClient, HttpParams} from "@angular/common/http";
 import {Subject} from "rxjs";
 import {AuthService} from "./auth.service";
@@ -25,8 +25,8 @@ export class StatusesService {
         this.statuses = data;
         this.statusesChanged.next(this.statuses);
       },
-      error: err => {
-
+      error: (err: any) => {
+        this.statusesChanged.error(err)
       }
     })
   }

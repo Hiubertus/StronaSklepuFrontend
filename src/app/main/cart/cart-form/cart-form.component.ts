@@ -1,18 +1,20 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
-import {NgIf} from "@angular/common";
-import {User} from "../../../models/user.model";
-import {Item} from "../../../models/item.model";
-import {OrderService} from "../../../services/order.service";
+import {User} from "../../../shared/models/user.model";
+import {Item} from "../../../shared/models/item.model";
+import {OrderService} from "../../../shared/services/order.service";
+import {InputWrapperComponent} from "../../../shared/components/input-wrapper/input-wrapper.component";
+import {LocalStorageService} from "../../../shared/services/local-storage.service";
+import {ItemService} from "../../../shared/services/item.service";
 
 @Component({
   selector: 'app-cart-form',
   standalone: true,
-    imports: [
-        FormsModule,
-        NgIf,
-        ReactiveFormsModule
-    ],
+  imports: [
+    FormsModule,
+    ReactiveFormsModule,
+    InputWrapperComponent
+  ],
   templateUrl: './cart-form.component.html',
   styleUrl: './cart-form.component.scss'
 })
@@ -25,12 +27,17 @@ export class CartFormComponent implements OnInit{
   cardForm!: FormGroup;
   blikForm!: FormGroup;
   addressForm!: FormGroup;
+  radioForm!: FormGroup;
 
-  errors: string[] = [];
   submitted: boolean = false;
-  constructor(private orderService: OrderService) {
+  constructor(private orderService: OrderService,
+              private localStorage: LocalStorageService,
+              private itemService: ItemService) {
   }
   ngOnInit() {
+    this.radioForm = new FormGroup({
+      paymentMethod: new FormControl('card') // domyślna wartość
+    });
     this.addressForm = new FormGroup({
       name: new FormControl(null,[
         Validators.required,
@@ -68,10 +75,13 @@ export class CartFormComponent implements OnInit{
         Validators.pattern('^[0-9]{3}$')
       ])
     });
+
+    this.radioForm.get('paymentMethod')?.valueChanges.subscribe(value => {
+      this.selectedPaymentMethod = value;
+    });
   }
   async onSubmit() {
     this.submitted = true
-    this.errors = [];
     if(this.addressForm.valid) {
       if((this.selectedPaymentMethod == 'blik' && this.blikForm.valid) || (this.selectedPaymentMethod == 'card' && this.cardForm.valid)) {
         try {
@@ -84,10 +94,50 @@ export class CartFormComponent implements OnInit{
             this.addressForm.value.apartment,
             this.selectedPaymentMethod,
             this.totalCost)
+          this.submitted = false
+          this.addressForm.disable()
+
+          if (this.selectedPaymentMethod=='blik') {
+            this.blikForm.reset()
+            this.blikForm.disable()
+            this.blikForm.get('blikCode')?.setErrors({ success: true } )
+          }
+          if (this.selectedPaymentMethod=='card') {
+            this.cardForm.reset()
+            this.cardForm.disable()
+            this.cardForm.get('ccv')?.setErrors({ success: true } )
+          }
         } catch(err: any) {
 
         }
       }
     }
+  }
+  get nameInput():FormControl {
+    return this.addressForm.controls['name'] as FormControl;
+  }
+  get surnameInput():FormControl {
+    return this.addressForm.controls['surname'] as FormControl;
+  }
+  get cityInput():FormControl {
+    return this.addressForm.controls['city'] as FormControl;
+  }
+  get streetInput():FormControl {
+    return this.addressForm.controls['street'] as FormControl;
+  }
+  get apartmentInput(): FormControl {
+    return this.addressForm.controls['apartment'] as FormControl;
+  }
+  get blikInput(): FormControl {
+    return this.blikForm.controls['blikCode'] as FormControl;
+  }
+  get cardNumberInput(): FormControl {
+    return this.cardForm.controls['cardNumber'] as FormControl;
+  }
+  get expirationDateInput(): FormControl {
+    return this.cardForm.controls['expirationDate'] as FormControl;
+  }
+  get ccvInput(): FormControl {
+    return this.cardForm.controls['ccv'] as FormControl;
   }
 }
